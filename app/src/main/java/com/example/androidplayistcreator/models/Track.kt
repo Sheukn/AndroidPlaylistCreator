@@ -1,6 +1,6 @@
 package com.example.androidplayistcreator.models
 
-data class Song(
+data class Track(
     val artist: String,
     val name: String,
     val step: Int,

@@ -5,7 +5,7 @@ data class Playlist (
     val creator: String,
     val id: Int,
     val name: String,
-    val songs: List<Song>,
+    val tracks: List<Track>,
     val url: String,
     val imageUrl: String
 )
