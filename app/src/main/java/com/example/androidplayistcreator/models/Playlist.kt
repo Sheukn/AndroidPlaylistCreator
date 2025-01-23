@@ -1,6 +1,6 @@
 package com.example.androidplayistcreator.models
 
-data class Playist (
+data class Playlist (
     val condition: List<Condition>,
     val creator: String,
     val id: Int,
