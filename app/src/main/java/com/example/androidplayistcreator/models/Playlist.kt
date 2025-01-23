@@ -6,5 +6,6 @@ data class Playlist (
     val id: Int,
     val name: String,
     val songs: List<Song>,
-    val url: String
+    val url: String,
+    val imageUrl: String
 )
