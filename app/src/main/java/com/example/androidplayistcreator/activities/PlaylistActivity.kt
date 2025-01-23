@@ -41,6 +41,19 @@ class PlaylistActivity : AppCompatActivity() {
                 songs = listOf(),
                 url = "https://example.com/playlist2",
                 imageUrl = "https://example.com/playlist2.jpg"
+            ),
+            Playlist(
+                condition = listOf(
+                    Condition("Destination 3", "Condition 3", "Source 3", "Type 3"),
+                    Condition("Destination 1", "Condition 1", "Source 1", "Type 1"),
+                    Condition("Destination 2", "Condition 2", "Source 2", "Type 2")
+                ),
+                creator = "Creator 2",
+                id = 2,
+                name = "Playlist 2",
+                songs = listOf(),
+                url = "https://example.com/playlist2",
+                imageUrl = "https://example.com/playlist2.jpg"
             )
         )
 
