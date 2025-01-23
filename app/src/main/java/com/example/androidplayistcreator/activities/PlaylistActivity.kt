@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Condition
+import com.example.androidplayistcreator.models.ConditionType
 import com.example.androidplayistcreator.models.Playlist
 import com.example.androidplayistcreator.views.recycler_view_adapters.PlaylistsRvAdapter
 
@@ -21,37 +22,37 @@ class PlaylistActivity : AppCompatActivity() {
         val playlists = listOf(
             Playlist(
                 condition = listOf(
-                    Condition("Destination 1", "Condition 1", "Source 1", "Type 1"),
-                    Condition("Destination 2", "Condition 2", "Source 2", "Type 2")
+                    Condition("Destination 1", "Condition 1", "Source 1", ConditionType.IF),
+                    Condition("Destination 2", "Condition 2", "Source 2", ConditionType.IF)
                 ),
                 creator = "Creator 1",
                 id = 1,
                 name = "Playlist 1",
-                songs = listOf(),
+                tracks = listOf(),
                 url = "https://example.com/playlist1",
                 imageUrl = "https://example.com/playlist1.jpg"
             ),
             Playlist(
                 condition = listOf(
-                    Condition("Destination 3", "Condition 3", "Source 3", "Type 3")
+                    Condition("Destination 3", "Condition 3", "Source 3", ConditionType.IF)
                 ),
                 creator = "Creator 2",
                 id = 2,
                 name = "Playlist 2",
-                songs = listOf(),
+                tracks = listOf(),
                 url = "https://example.com/playlist2",
                 imageUrl = "https://example.com/playlist2.jpg"
             ),
             Playlist(
                 condition = listOf(
-                    Condition("Destination 3", "Condition 3", "Source 3", "Type 3"),
-                    Condition("Destination 1", "Condition 1", "Source 1", "Type 1"),
-                    Condition("Destination 2", "Condition 2", "Source 2", "Type 2")
+                    Condition("Destination 3", "Condition 3", "Source 3", ConditionType.IF),
+                    Condition("Destination 1", "Condition 1", "Source 1", ConditionType.IF),
+                    Condition("Destination 2", "Condition 2", "Source 2", ConditionType.IF)
                 ),
                 creator = "Creator 2",
                 id = 2,
                 name = "Playlist 2",
-                songs = listOf(),
+                tracks = listOf(),
                 url = "https://example.com/playlist2",
                 imageUrl = "https://example.com/playlist2.jpg"
             )

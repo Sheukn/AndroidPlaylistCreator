@@ -4,5 +4,5 @@ data class Condition(
     val destination: String,
     val name: String,
     val source: String,
-    val type: String
+    val type: ConditionType
 )
