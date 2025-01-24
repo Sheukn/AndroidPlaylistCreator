@@ -3,8 +3,8 @@ package com.example.androidplayistcreator.views.viewholders
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Playlist
 
@@ -16,7 +16,9 @@ class PlaylistsRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     // You can add methods to bind data if needed
     fun bind(playlist: Playlist) {
         playlistTitle.text = playlist.name
-        // You can load images with a library like Glide or Picasso
-        // Glide.with(itemView.context).load(playlist.imageUrl).into(playlistImage)
+        Glide.with(itemView.context)
+            .load(playlist.url)
+            .error(R.mipmap.ic_launcher_round) // Optional error placeholder
+            .into(playlistImage)
     }
 }

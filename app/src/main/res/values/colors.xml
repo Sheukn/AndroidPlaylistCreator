@@ -7,4 +7,6 @@
     <color name="somewhatBeige">#EAE2B7</color>
     <color name="red">#FF0000</color>
     <color name="lighterOrange">#FCBF49</color>
+    <color name="green">#00FF00</color>
+    <color name="blue">#0000FF</color>
 </resources>
