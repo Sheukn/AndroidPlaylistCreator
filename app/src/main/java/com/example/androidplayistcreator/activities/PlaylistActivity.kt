@@ -18,45 +18,22 @@ class PlaylistActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playlist)
 
-        // Sample data for playlists
-        val playlists = listOf(
-            Playlist(
-                condition = listOf(
-                    Condition("Destination 1", "Condition 1", "Source 1", ConditionType.IF),
-                    Condition("Destination 2", "Condition 2", "Source 2", ConditionType.IF)
-                ),
-                creator = "Creator 1",
-                id = 1,
-                name = "Playlist 1",
-                tracks = listOf(),
-                url = "https://example.com/playlist1",
-                imageUrl = "https://example.com/playlist1.jpg"
+        var playlist = Playlist(
+            condition = listOf(
+                Condition("Destination 1", "Condition 1", "Source 1", ConditionType.IF),
+                Condition("Destination 2", "Condition 2", "Source 2", ConditionType.IF)
             ),
-            Playlist(
-                condition = listOf(
-                    Condition("Destination 3", "Condition 3", "Source 3", ConditionType.IF)
-                ),
-                creator = "Creator 2",
-                id = 2,
-                name = "Playlist 2",
-                tracks = listOf(),
-                url = "https://example.com/playlist2",
-                imageUrl = "https://example.com/playlist2.jpg"
-            ),
-            Playlist(
-                condition = listOf(
-                    Condition("Destination 3", "Condition 3", "Source 3", ConditionType.IF),
-                    Condition("Destination 1", "Condition 1", "Source 1", ConditionType.IF),
-                    Condition("Destination 2", "Condition 2", "Source 2", ConditionType.IF)
-                ),
-                creator = "Creator 2",
-                id = 2,
-                name = "Playlist 2",
-                tracks = listOf(),
-                url = "https://example.com/playlist2",
-                imageUrl = "https://example.com/playlist2.jpg"
-            )
+            creator = "Creator 1",
+            id = 1,
+            name = "Playlist 1",
+            tracks = listOf(),
+            url = "https://example.com/playlist1",
+            imageUrl = "https://example.com/playlist1.jpg"
         )
+
+        // Sample data for playlists
+        val COUNT = 10
+        val playlists = List(COUNT) { playlist }
 
         // RecyclerView setup
         val recyclerView: RecyclerView = findViewById(R.id.playlist_RecyclerView)
