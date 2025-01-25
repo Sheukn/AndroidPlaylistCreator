@@ -3,6 +3,7 @@ package com.example.androidplayistcreator.views.recycler_view_adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.views.viewholders.subTrackRvViewHolder
 
