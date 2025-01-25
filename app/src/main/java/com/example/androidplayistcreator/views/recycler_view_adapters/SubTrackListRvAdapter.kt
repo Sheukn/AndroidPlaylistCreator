@@ -10,7 +10,7 @@ import com.example.androidplayistcreator.views.viewholders.subTrackRvViewHolder
 class SubTrackListRvAdapter(val subTracks: List<Track>):
     RecyclerView.Adapter<subTrackRvViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): subTrackRvViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.sub_track_view_holder, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.subtrack_view_holder, parent, false)
         return subTrackRvViewHolder(view)
     }
 
