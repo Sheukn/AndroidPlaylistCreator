@@ -5,5 +5,6 @@ data class Track(
     val name: String,
     val step: Int,
     val url: String,
-    val duration: String
+    val duration: String,
+    val isSubTrack: Boolean
 )

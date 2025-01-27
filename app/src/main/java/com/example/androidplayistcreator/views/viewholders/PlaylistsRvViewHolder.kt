@@ -16,9 +16,5 @@ class PlaylistsRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     // You can add methods to bind data if needed
     fun bind(playlist: Playlist) {
         playlistTitle.text = playlist.name
-        Glide.with(itemView.context)
-            .load(playlist.url)
-            .error(R.mipmap.ic_launcher_round) // Optional error placeholder
-            .into(playlistImage)
     }
 }
