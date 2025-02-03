@@ -49,11 +49,6 @@
                     android:textColor="@color/somewhatBeige"
                     android:textSize="20sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:id="@+id/playlist_details_recyclerView"/>
-
             </LinearLayout>
         </LinearLayout>
 

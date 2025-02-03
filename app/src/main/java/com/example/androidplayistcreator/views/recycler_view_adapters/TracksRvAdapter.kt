@@ -1,5 +1,6 @@
 package com.example.androidplayistcreator.views.recycler_view_adapters
 
+import com.example.androidplayistcreator.models.Track
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,76 +8,55 @@ import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Step
 import com.example.androidplayistcreator.views.viewholders.mainTrackRvViewHolder
 import com.example.androidplayistcreator.views.viewholders.secondaryTrackListRvViewHolder
+import com.example.androidplayistcreator.views.viewholders.subTrackRvViewHolder
 
-class TracksRvAdapter(val steps: List<Step>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TracksRvAdapter(private val steps: List<Step>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        private const val MAIN_TRACK_TYPE = 0
-        private const val SUB_TRACK_TYPE = 1
+        private const val TYPE_MAIN_TRACK = 0
+        private const val TYPE_SUB_TRACK_LIST = 1
+        private const val TYPE_SUB_TRACK = 2
     }
 
     override fun getItemViewType(position: Int): Int {
-        // Get the step and the position within that step
-        val stepIndex = getStepIndex(position)
-        val step = steps[stepIndex]
-        val trackPositionInStep = position - getStartIndexForStep(stepIndex)
-
-        return if (trackPositionInStep == 0) MAIN_TRACK_TYPE else SUB_TRACK_TYPE
+        // On vérifie si l'élément est un mainTrack ou une liste de subTracks
+        val step = steps[position]
+        return when {
+            position % 2 == 0 -> TYPE_MAIN_TRACK
+            step.subTracks.isNotEmpty() -> TYPE_SUB_TRACK_LIST
+            else -> TYPE_SUB_TRACK
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            MAIN_TRACK_TYPE -> {
-                val view = inflater.inflate(R.layout.main_track_view_holder, parent, false)
+            TYPE_MAIN_TRACK -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.main_track_view_holder, parent, false)
                 mainTrackRvViewHolder(view)
             }
-
-            SUB_TRACK_TYPE -> {
-                val view =
-                    inflater.inflate(R.layout.secondary_track_list_view_holder, parent, false)
+            TYPE_SUB_TRACK_LIST -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.secondary_track_list_view_holder, parent, false)
                 secondaryTrackListRvViewHolder(view)
             }
-
-            else -> throw IllegalArgumentException("Invalid view type")
+            TYPE_SUB_TRACK -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.subtrack_view_holder, parent, false)
+                subTrackRvViewHolder(view)
+            }
+            else -> throw IllegalArgumentException("Unknown view type")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val stepIndex = getStepIndex(position)
-        val step = steps[stepIndex]
-        val trackPositionInStep = position - getStartIndexForStep(stepIndex)
-
-        if (trackPositionInStep == 0) {
-            // Bind the main track
-            (holder as mainTrackRvViewHolder).bind(step.mainTrack)
-        } else {
-            // Bind the sub-track
-            (holder as secondaryTrackListRvViewHolder).bind(step.subTracks)
+        val step = steps[position]
+        when (holder) {
+            is mainTrackRvViewHolder -> holder.bind(step.mainTrack)
+            is secondaryTrackListRvViewHolder -> holder.bind(step.subTracks)
+            is subTrackRvViewHolder -> holder.bind(step.subTracks[position])
         }
     }
 
     override fun getItemCount(): Int {
-        // Calculate the total item count: main track + sub-tracks for each step
-        return steps.sumBy { it.subTracks.size + 1 }
-    }
-
-    private fun getStartIndexForStep(stepIndex: Int): Int {
-        return (0 until stepIndex).sumOf { steps[it].subTracks.size + 1 }
-    }
-
-    private fun getStepIndex(position: Int): Int {
-        var currentIndex = 0
-        var cumulativeCount = 0
-
-        while (currentIndex < steps.size) {
-            val step = steps[currentIndex]
-            cumulativeCount += step.subTracks.size + 1
-            if (position < cumulativeCount) {
-                return currentIndex
-            }
-            currentIndex++
-        }
-        throw IndexOutOfBoundsException("Invalid position: $position")
+        return steps.size
     }
 }
+

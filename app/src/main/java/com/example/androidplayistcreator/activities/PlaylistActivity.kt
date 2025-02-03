@@ -26,7 +26,7 @@ class PlaylistActivity : AppCompatActivity() {
             creator = "Creator 1",
             id = 1,
             name = "Playlist 1",
-            tracks = listOf(),
+            steps = listOf(),
             url = "https://example.com/playlist1",
             imageUrl = "https://example.com/playlist1.jpg"
         )
