@@ -1,6 +1,5 @@
 package com.example.androidplayistcreator.views.recycler_view_adapters
 
-import com.example.androidplayistcreator.models.Track
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,15 +30,15 @@ class TracksRvAdapter(private val steps: List<Step>) : RecyclerView.Adapter<Recy
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_MAIN_TRACK -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.main_track_view_holder, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_main_track, parent, false)
                 mainTrackRvViewHolder(view)
             }
             TYPE_SUB_TRACK_LIST -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.secondary_track_list_view_holder, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_subtracks_list, parent, false)
                 secondaryTrackListRvViewHolder(view)
             }
             TYPE_SUB_TRACK -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.subtrack_view_holder, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_subtrack, parent, false)
                 subTrackRvViewHolder(view)
             }
             else -> throw IllegalArgumentException("Unknown view type")
