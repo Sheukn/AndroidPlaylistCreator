@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
 
-class subTrackRvViewHolder (ItemView: View) : RecyclerView.ViewHolder(ItemView) {
+class SubTrackRvViewHolder (ItemView: View) : RecyclerView.ViewHolder(ItemView) {
     val dotView: View = itemView.findViewById(R.id.dotView)
     val trackTitle: TextView = itemView.findViewById(R.id.subTrackTextView)
 

@@ -25,7 +25,8 @@ class TrackListActivity : AppCompatActivity() {
                 step = currentStep,
                 url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                 duration = "3:00",
-                isSubTrack = false
+                isSubTrack = false,
+
             )
 
             val subTracks = mutableListOf<Track>()

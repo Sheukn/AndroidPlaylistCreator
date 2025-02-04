@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Step
 import com.example.androidplayistcreator.views.viewholders.mainTrackRvViewHolder
-import com.example.androidplayistcreator.views.viewholders.secondaryTrackListRvViewHolder
-import com.example.androidplayistcreator.views.viewholders.subTrackRvViewHolder
+import com.example.androidplayistcreator.views.viewholders.SecondaryTrackListRvViewHolder
+import com.example.androidplayistcreator.views.viewholders.SubTrackRvViewHolder
 
 class TracksRvAdapter(private val steps: List<Step>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -35,11 +35,11 @@ class TracksRvAdapter(private val steps: List<Step>) : RecyclerView.Adapter<Recy
             }
             TYPE_SUB_TRACK_LIST -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_subtracks_list, parent, false)
-                secondaryTrackListRvViewHolder(view)
+                SecondaryTrackListRvViewHolder(view)
             }
             TYPE_SUB_TRACK -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_subtrack, parent, false)
-                subTrackRvViewHolder(view)
+                SubTrackRvViewHolder(view)
             }
             else -> throw IllegalArgumentException("Unknown view type")
         }
@@ -49,8 +49,8 @@ class TracksRvAdapter(private val steps: List<Step>) : RecyclerView.Adapter<Recy
         val step = steps[position]
         when (holder) {
             is mainTrackRvViewHolder -> holder.bind(step.mainTrack)
-            is secondaryTrackListRvViewHolder -> holder.bind(step.subTracks)
-            is subTrackRvViewHolder -> holder.bind(step.subTracks[position])
+            is SecondaryTrackListRvViewHolder -> holder.bind(step.subTracks)
+            is SubTrackRvViewHolder -> holder.bind(step.subTracks[position])
         }
     }
 
