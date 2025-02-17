@@ -10,6 +10,11 @@ material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 recyclerview = "1.4.0"
+retrofit = "2.9.0"
+converterGson = "2.9.0"
+googleApiServicesYoutube = "v3-rev222-1.25.0"
+gson = "2.10.1"
+guava = "31.1-android"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -23,6 +28,11 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.15.1" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.15.1" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+google-api-services-youtube = { module = "com.google.apis:google-api-services-youtube", version.ref = "googleApiServicesYoutube" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -15,6 +15,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "YOUTUBE_API_KEY", "\"${rootProject.ext["youtubeAPIKey"]}\"")
     }
 
     buildTypes {
@@ -33,6 +35,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    packaging {
+        resources {
+            excludes.add("META-INF/DEPENDENCIES")
+        }
+    }
 }
 
 dependencies {
@@ -46,4 +58,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    implementation(libs.guava)
+
+    // YouTube API
+    implementation(libs.google.api.services.youtube)
+
+    // JSON Parsing
+    implementation(libs.gson)
 }
