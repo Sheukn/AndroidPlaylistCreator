@@ -7,11 +7,13 @@ import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.views.recycler_view_adapters.SubTrackListRvAdapter
 
-class SecondaryTrackListRvViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-    val secondaryTrackListRecyclerView: RecyclerView = itemView.findViewById(R.id.secondaryTrackListRecyclerView)
+class SecondaryTrackListRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val secondaryTrackListRecyclerView: RecyclerView = itemView.findViewById(R.id.secondaryTrackListRecyclerView)
 
     fun bind(subTracks: List<Track>) {
+        val adapter = SubTrackListRvAdapter(subTracks)
         secondaryTrackListRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
-        secondaryTrackListRecyclerView.adapter = SubTrackListRvAdapter(subTracks)
+        secondaryTrackListRecyclerView.adapter = adapter
     }
 }
+
