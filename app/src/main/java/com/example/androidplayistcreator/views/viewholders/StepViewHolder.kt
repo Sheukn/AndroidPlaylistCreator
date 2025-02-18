@@ -11,12 +11,10 @@ import com.example.androidplayistcreator.views.recycler_view_adapters.SubTrackLi
 import com.google.android.material.card.MaterialCardView
 
 class StepViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val mainTrackCardView: MaterialCardView = itemView.findViewById(R.id.mainTrackCardView)
     private val trackTextView: TextView = itemView.findViewById(R.id.trackTextView)
     private val trackDurationTextView: TextView = itemView.findViewById(R.id.trackDurationTextView)
     private val trackImageView: ImageView = itemView.findViewById(R.id.trackImageView)
 
-    // Sub-track CardView & RecyclerView
     private val subTrackCardView: MaterialCardView = itemView.findViewById(R.id.subTrackListCardView)
     private val subTracksRecyclerView: RecyclerView = itemView.findViewById(R.id.secondaryTrackListRecyclerView)
 

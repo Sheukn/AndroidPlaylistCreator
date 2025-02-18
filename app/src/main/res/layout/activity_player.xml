@@ -15,7 +15,7 @@
         android:fontFamily="@font/madimi_regular"
         android:text="Application Name"
         android:textColor="@color/somewhatBeige"
-        android:textSize="40sp"
+        android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

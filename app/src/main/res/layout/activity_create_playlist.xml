@@ -14,7 +14,7 @@
         android:fontFamily="@font/madimi_regular"
         android:text="Application Name"
         android:textColor="@color/somewhatBeige"
-        android:textSize="40sp"
+        android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +47,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/playlistCreateRecyclerView"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/playlistCreateLinearLayout"
@@ -55,25 +55,33 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="15dp"/>
 
-    <ImageView
-        android:layout_marginTop="15dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/addTrackButton"
-        android:src="@drawable/add_button"
-        app:layout_constraintTop_toBottomOf="@id/playlistCreateRecyclerView"
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/somewhatBeige"
+        android:text="Add Track"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toLeftOf="@id/playlistCreateButton"
+        android:layout_marginBottom="10dp"
+
+         />
 
     <Button
         android:id="@+id/playlistCreateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/orange"
         android:text="Create Playlist"
-        app:layout_constraintTop_toBottomOf="@id/addTrackButton"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:backgroundTint="@color/orange"/>
+        app:layout_constraintLeft_toRightOf="@id/add_button"
+        android:layout_marginBottom="10dp"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
