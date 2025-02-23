@@ -15,8 +15,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "YOUTUBE_API_KEY", "\"${rootProject.ext["youtubeAPIKey"]}\"")
     }
 
     buildTypes {
@@ -61,12 +59,8 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.exoplayer)
 
-    implementation(libs.guava)
+    implementation(libs.logging.interceptor)
 
-    // YouTube API
-    implementation(libs.google.api.services.youtube)
-
-    // JSON Parsing
-    implementation(libs.gson)
 }

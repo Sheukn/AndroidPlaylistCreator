@@ -1,63 +1,90 @@
 package com.example.androidplayistcreator.activities
 
 import android.os.Bundle
-import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.androidplayistcreator.BuildConfig
 import com.example.androidplayistcreator.R
-import com.example.androidplayistcreator.serivce.YouTubeApiService
-import com.example.androidplayistcreator.utils.WebViewUtil
+import com.example.androidplayistcreator.models.player.AudioResponse
+import com.example.androidplayistcreator.serivce.YTDLPApiService
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.PlayerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class PlayerActivity   : AppCompatActivity() {
-    private var isPlaying = false
+class PlayerActivity : AppCompatActivity() {
+
+    private lateinit var exoPlayer: ExoPlayer
+    private lateinit var playerView: PlayerView
     private lateinit var playButton: ImageView
-    private lateinit var youtubeWebViewContainer: FrameLayout
+    private var isPlaying = false
 
-    private val youtubeApiKey by lazy { BuildConfig.YOUTUBE_API_KEY }
-    private val youtubeApiService = YouTubeApiService.create()
+    private val ytDlpApiService = YTDLPApiService.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+
+        playerView = findViewById(R.id.exoPlayerView)
         playButton = findViewById(R.id.playButton)
 
-        val youtubeWebViewContainer = findViewById<FrameLayout>(R.id.youtubeWebViewContainer)
+        // Initialize ExoPlayer
+        exoPlayer = ExoPlayer.Builder(this).build()
+        playerView.player = exoPlayer
 
-        // The YouTube video ID to play
-        val videoId = "3BFTio5296w"  // The video you provided
-//        "https://m.youtube.com/v/3BFTio5296w?autoplay=1&controls=0&modestbranding=1&playsinline=1"
+        // Example YouTube URL
+        val videoUrl = "https://www.youtube.com/watch?v=3BFTio5296w"
 
-
-        // Load the video
-        WebViewUtil.loadYouTubeVideo(youtubeWebViewContainer, videoId)
+        // Fetch Audio Stream URL from Backend
+        fetchAudioStream(videoUrl)
 
         playButton.setOnClickListener {
             if (isPlaying) {
-                // Pause the video by stopping WebView (or use JavaScript)
-                stopVideo()
+                exoPlayer.pause()
             } else {
-                // Play the video by loading the WebView again (autoplay)
-                startVideo(videoId)
+                exoPlayer.play()
             }
             isPlaying = !isPlaying
         }
-
     }
 
-    private fun startVideo(videoId: String) {
-        WebViewUtil.loadYouTubeVideo(youtubeWebViewContainer, videoId)
+    private fun fetchAudioStream(videoUrl: String) {
+        val requestBody = mapOf("url" to videoUrl)
+
+        ytDlpApiService.getAudioUrl(requestBody).enqueue(object : Callback<AudioResponse> {
+            override fun onResponse(call: Call<AudioResponse>, response: Response<AudioResponse>) {
+                if (response.isSuccessful) {
+                    val audioUrl = response.body()?.audio_url
+                    audioUrl?.let {
+                        playAudio(it)
+                    } ?: showToast("Failed to get audio URL.")
+                } else {
+                    showToast("Backend Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<AudioResponse>, t: Throwable) {
+                showToast("Network Error: ${t.localizedMessage}")
+            }
+        })
     }
 
-    private fun stopVideo() {
-        youtubeWebViewContainer.removeAllViews()
+    private fun playAudio(audioUrl: String) {
+        val mediaItem = MediaItem.fromUri(audioUrl)
+        exoPlayer.setMediaItem(mediaItem)
+        exoPlayer.prepare()
+        exoPlayer.play()
+        isPlaying = true
     }
 
-    private fun searchYouTube(query: String, onResult: (String?) -> Unit) {
-        youtubeApiService.searchYouTube(query, youtubeApiKey, onResult)
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun loadYouTubeVideo(container: FrameLayout, videoId: String) {
-        WebViewUtil.loadYouTubeVideo(container, videoId)
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer.release()
     }
 }
