@@ -4,19 +4,24 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
-import com.example.androidplayistcreator.models.Step
-import com.example.androidplayistcreator.views.viewholders.StepViewHolder
+import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.views.viewholders.TrackViewHolder
 
-class TracksRvAdapter(private val steps: List<Step>) : RecyclerView.Adapter<StepViewHolder>() {
+class TracksRvAdapter(private var tracks: List<Track>) : RecyclerView.Adapter<TrackViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_step, parent, false)
-        return StepViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_track, parent, false)
+        return TrackViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: StepViewHolder, position: Int) {
-        holder.bind(steps[position])
+    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+        holder.bind(tracks[position])
     }
 
-    override fun getItemCount(): Int = steps.size
+    override fun getItemCount(): Int = tracks.size
+
+    fun updateTracks(newTracks: List<Track>) {
+        tracks = newTracks
+        notifyDataSetChanged()
+    }
 }

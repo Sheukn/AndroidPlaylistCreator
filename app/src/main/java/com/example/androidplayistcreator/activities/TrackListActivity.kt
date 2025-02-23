@@ -1,61 +1,56 @@
 package com.example.androidplayistcreator.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
-import com.example.androidplayistcreator.models.Step
+import com.example.androidplayistcreator.database.TrackRepository
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.views.recycler_view_adapters.TracksRvAdapter
-import kotlin.random.Random
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TrackListActivity : AppCompatActivity() {
+    private lateinit var trackRepository: TrackRepository
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: TracksRvAdapter
+    private var playlistId: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracks)
 
-        var currentStep = 1
-        var steps = mutableListOf<Step>()
-        for (i in 1..10) {
-            val mainTrack = Track(
-                artist = "Artist $i",
-                name = "Track $i",
-                step = currentStep,
-                url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                duration = "3:00",
-                isSubTrack = false,
+        playlistId = intent.getIntExtra("PLAYLIST_ID", 0)
+        trackRepository = TrackRepository(this)
 
-            )
-
-            val subTracks = mutableListOf<Track>()
-            val random = Random.nextInt(0, 3)
-            for (j in 0..random) {
-                subTracks.add(
-                    Track(
-                        artist = "Artist $i",
-                        name = "Sub Track ${i+j}",
-                        step = currentStep,
-                        url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                        duration = "3:00",
-                        isSubTrack = true
-                    )
-                )
-            }
-
-            steps.add(Step(step = currentStep, mainTrack = mainTrack, subTracks = subTracks))
-            currentStep++
-        }
-
-        Log.i("TrackListActivity", "Steps: $steps")
-        for (step in steps) {
-            Log.i("TrackListActivity", "SubTracks: ${step.subTracks.size}")
-        }
-
-        val recyclerView: RecyclerView = findViewById(R.id.tracksRecyclerView)
+        recyclerView = findViewById(R.id.tracksRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = TracksRvAdapter(steps)
+        adapter = TracksRvAdapter(emptyList())
+        recyclerView.adapter = adapter
 
+        findViewById<FloatingActionButton>(R.id.addTrackButton).setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ADD_TRACK)
+        }
+
+        loadTracks()
+    }
+
+    private fun loadTracks() {
+        val tracks = trackRepository.getTracksByPlaylistId(playlistId)
+        adapter.updateTracks(tracks)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_ADD_TRACK && resultCode == RESULT_OK) {
+            loadTracks()
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CODE_ADD_TRACK = 1
     }
 }

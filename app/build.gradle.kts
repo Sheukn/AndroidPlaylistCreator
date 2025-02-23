@@ -62,5 +62,6 @@ dependencies {
     implementation(libs.exoplayer)
 
     implementation(libs.logging.interceptor)
-
+    implementation(libs.androidx.sqlite)
+    implementation(libs.androidx.sqlite.framework)
 }
