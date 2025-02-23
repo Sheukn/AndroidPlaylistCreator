@@ -18,7 +18,10 @@ interface YTDLPApiService {
     fun getAudioUrl(@Body request: Map<String, String>): Call<AudioResponse>
 
     @GET("search")
-    fun searchVideos(@Query("query") query: String): Call<SearchResponse>
+    fun searchYoutubeVideos(@Query("query") query: String): Call<SearchResponse>
+
+    @GET("search_audius")
+    fun searchAudius(@Query("query") query: String): Call<SearchResponse>
 
     companion object {
         private const val BASE_URL = "http://192.168.1.201:5000/"  // Replace with your backend URL

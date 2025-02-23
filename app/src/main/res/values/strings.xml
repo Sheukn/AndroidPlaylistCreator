@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AndroidPlayistCreator</string>
+    <string-array name="source_array">
+        <item>Audius</item>
+        <item>YouTube</item>
+    </string-array>
 </resources>
