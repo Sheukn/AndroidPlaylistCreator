@@ -5,6 +5,8 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,12 +22,16 @@ import retrofit2.Response
 class SearchActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SearchResultRvAdapter
+    private lateinit var searchEditText: EditText
+    private lateinit var searchButton: Button
     private val apiService = YTDLPApiService.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_research)
 
+        searchEditText = findViewById(R.id.searchEditText)
+        searchButton = findViewById(R.id.searchButton)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SearchResultRvAdapter(emptyList()) { track ->
@@ -36,7 +42,14 @@ class SearchActivity : AppCompatActivity() {
         }
         recyclerView.adapter = adapter
 
-        performSearch("your search query")
+        searchButton.setOnClickListener {
+            val query = searchEditText.text.toString()
+            if (query.isNotEmpty()) {
+                performSearch(query)
+            } else {
+                showAlert("Search failed", "Please enter a search query.")
+            }
+        }
     }
 
     private fun performSearch(query: String) {
@@ -44,11 +57,12 @@ class SearchActivity : AppCompatActivity() {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                 if (response.isSuccessful) {
                     val searchResults = response.body()?.results?.map {
+                        val videoId = it.url.split("v=").getOrNull(1)?.split("&")?.getOrNull(0) ?: ""
                         Track(
                             artist = it.artist,
                             name = it.title,
                             step = 1,  // Adjust as needed
-                            video_id = it.videoId,
+                            video_id = videoId,
                             duration = it.duration,
                             isSubTrack = false,
                             source = "YOUTUBE"
