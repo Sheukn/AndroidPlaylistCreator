@@ -21,7 +21,7 @@ interface YTDLPApiService {
     fun searchYoutubeVideos(@Query("query") query: String): Call<SearchResponse>
 
     companion object {
-        private const val BASE_URL = "http://192.168.1.201:5000/"  // Replace with your backend URL
+        private const val BASE_URL = "http://janikowski.freeboxos.fr:44597/"  // Replace with your backend URL
 
         fun create(): YTDLPApiService {
             // Create the logging interceptor

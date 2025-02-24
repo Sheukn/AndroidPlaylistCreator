@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -27,14 +28,15 @@ class SearchActivity : AppCompatActivity() {
     private val TAG = "SearchActivity"
     private val SOURCE_YOUTUBE = "YouTube"
     private val SOURCE_AUDIUS = "Audius"
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SearchResultRvAdapter
     private lateinit var searchEditText: EditText
     private lateinit var searchButton: Button
-    private lateinit var sourceButton: Button
+    private lateinit var audiusCheckBox: CheckBox
+    private lateinit var youtubeCheckBox: CheckBox
 
     private val apiService = YTDLPApiService.create()
-    private var selectedSource = SOURCE_AUDIUS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +49,11 @@ class SearchActivity : AppCompatActivity() {
     private fun setupViews() {
         searchEditText = findViewById(R.id.searchEditText)
         searchButton = findViewById(R.id.searchButton)
-        sourceButton = findViewById(R.id.sourceButton)
+        audiusCheckBox = findViewById(R.id.audiusCheckBox)
+        youtubeCheckBox = findViewById(R.id.youtubeCheckBox)
         recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
+        recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SearchResultRvAdapter(mutableListOf()) { track ->
             setResult(Activity.RESULT_OK, Intent().apply {
                 putExtra("SELECTED_TRACK", track.toString())
@@ -61,30 +64,60 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        sourceButton.setOnClickListener {
-            selectedSource = if (selectedSource == SOURCE_AUDIUS) SOURCE_YOUTUBE else SOURCE_AUDIUS
-            Log.d(TAG, "Selected source: $selectedSource")
-            sourceButton.text = selectedSource
-        }
-
         searchButton.setOnClickListener {
             val query = searchEditText.text.toString()
             if (query.isNotEmpty()) {
-                performSearch(query, selectedSource)
+                val selectedSources = getSelectedSources()
+                if (selectedSources.isNotEmpty()) {
+                    performSearch(query, selectedSources)
+                } else {
+                    showAlert("Search failed", "Please select at least one source.")
+                }
             } else {
                 showAlert("Search failed", "Please enter a search query.")
             }
         }
     }
 
-    private fun performSearch(query: String, source: String) {
-        when (source) {
-            SOURCE_YOUTUBE -> searchYouTube(query)
-            SOURCE_AUDIUS -> searchAudius(query)
+    private fun getSelectedSources(): List<String> {
+        val sources = mutableListOf<String>()
+        if (audiusCheckBox.isChecked) sources.add(SOURCE_AUDIUS)
+        if (youtubeCheckBox.isChecked) sources.add(SOURCE_YOUTUBE)
+        return sources
+    }
+
+    private fun performSearch(query: String, sources: List<String>) {
+        val allResults = mutableListOf<Track>()
+
+        val youtubeSearch = sources.contains(SOURCE_YOUTUBE)
+        val audiusSearch = sources.contains(SOURCE_AUDIUS)
+
+        if (youtubeSearch) {
+            searchYouTube(query) { youtubeResults ->
+                allResults.addAll(youtubeResults)
+                updateRecyclerViewIfFinished(allResults, youtubeSearch, audiusSearch)
+            }
+        }
+
+        if (audiusSearch) {
+            searchAudius(query) { audiusResults ->
+                allResults.addAll(audiusResults)
+                updateRecyclerViewIfFinished(allResults, youtubeSearch, audiusSearch)
+            }
         }
     }
 
-    private fun searchYouTube(query: String) {
+    private fun updateRecyclerViewIfFinished(
+        results: List<Track>,
+        youtubeSearch: Boolean,
+        audiusSearch: Boolean
+    ) {
+        if ((youtubeSearch && audiusSearch && results.size >= 2) || (!youtubeSearch || !audiusSearch)) {
+            adapter.updateTracks(results)
+        }
+    }
+
+    private fun searchYouTube(query: String, callback: (List<Track>) -> Unit) {
         apiService.searchYoutubeVideos(query).enqueue(object : Callback<SearchResponse> {
             override fun onResponse(
                 call: Call<SearchResponse>,
@@ -103,20 +136,22 @@ class SearchActivity : AppCompatActivity() {
                         )
                     } ?: emptyList()
 
-                    adapter.updateTracks(searchResults)
+                    callback(searchResults)
                 } else {
-                    showAlert("Search failed", "Unable to fetch search results.")
+                    showAlert("Search failed", "Unable to fetch search results from YouTube.")
+                    callback(emptyList())
                 }
             }
 
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 Log.e(TAG, "YouTube search failed", t)
                 showAlert("Search failed", "Unable to fetch search results on YouTube.")
+                callback(emptyList())
             }
         })
     }
 
-    private fun searchAudius(query: String) {
+    private fun searchAudius(query: String, callback: (List<Track>) -> Unit) {
         lifecycleScope.launch {
             try {
                 val response = AudiusService.api.searchTracks(query)
@@ -131,11 +166,11 @@ class SearchActivity : AppCompatActivity() {
                         source = SOURCE_AUDIUS
                     )
                 }
-                adapter.updateTracks(searchResults)
-                Log.d(TAG, "Search results: $searchResults")
+                callback(searchResults)
             } catch (e: Exception) {
                 Log.e(TAG, "Audius search failed", e)
                 showAlert("Search failed", "Unable to fetch search results on Audius.")
+                callback(emptyList())
             }
         }
     }
@@ -147,5 +182,5 @@ class SearchActivity : AppCompatActivity() {
             .setPositiveButton(android.R.string.ok, null)
             .show()
     }
-
 }
+

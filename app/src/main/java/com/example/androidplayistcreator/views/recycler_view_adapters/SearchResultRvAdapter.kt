@@ -1,5 +1,6 @@
 package com.example.androidplayistcreator.views.recycler_view_adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ class SearchResultRvAdapter(
         return SearchResultRvViewHolder(view)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateTracks(newSearchResults: List<Track>) {
         searchResults.clear()
         searchResults.addAll(newSearchResults)
