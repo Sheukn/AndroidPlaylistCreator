@@ -1,6 +1,7 @@
 package com.example.androidplayistcreator.views.recycler_view_adapters
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,24 +15,28 @@ class SearchResultRvAdapter(
 ) : RecyclerView.Adapter<SearchResultRvViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultRvViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_search_results, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.view_holder_search_results, parent, false)
         return SearchResultRvViewHolder(view)
     }
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateTracks(newSearchResults: List<Track>) {
         searchResults.clear()
         searchResults.addAll(newSearchResults)
-        notifyDataSetChanged() // Met à jour la RecyclerView
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: SearchResultRvViewHolder, position: Int) {
         val searchResult = searchResults[position]
         holder.bind(searchResult)
         holder.itemView.setOnClickListener {
+            Log.d("SearchResultRvAdapter", "Track selected: $searchResult") // Log des détails
             onTrackSelected(searchResult)
         }
     }
+
 
     override fun getItemCount(): Int = searchResults.size
 }

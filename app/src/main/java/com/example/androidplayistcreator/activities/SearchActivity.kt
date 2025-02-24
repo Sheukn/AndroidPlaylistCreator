@@ -55,11 +55,13 @@ class SearchActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SearchResultRvAdapter(mutableListOf()) { track ->
+            Log.d("SearchActivity", "User selected: ${track.name} by ${track.artist}")
             setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra("SELECTED_TRACK", track.toString())
+                putExtra("SELECTED_TRACK", track.name)
             })
-            finish()
+//            finish()
         }
+
         recyclerView.adapter = adapter
     }
 
@@ -95,25 +97,25 @@ class SearchActivity : AppCompatActivity() {
         if (youtubeSearch) {
             searchYouTube(query) { youtubeResults ->
                 allResults.addAll(youtubeResults)
-                updateRecyclerViewIfFinished(allResults, youtubeSearch, audiusSearch)
+                updateRecyclerViewIfFinished(allResults)
             }
         }
 
         if (audiusSearch) {
             searchAudius(query) { audiusResults ->
                 allResults.addAll(audiusResults)
-                updateRecyclerViewIfFinished(allResults, youtubeSearch, audiusSearch)
+                updateRecyclerViewIfFinished(allResults)
             }
         }
     }
 
     private fun updateRecyclerViewIfFinished(
         results: List<Track>,
-        youtubeSearch: Boolean,
-        audiusSearch: Boolean
     ) {
-        if ((youtubeSearch && audiusSearch && results.size >= 2) || (!youtubeSearch || !audiusSearch)) {
+        if (results.isNotEmpty()) {
             adapter.updateTracks(results)
+        } else {
+            showAlert("Search failed", "Nothing Found")
         }
     }
 
