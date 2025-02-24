@@ -12,10 +12,10 @@ class SearchResultRvViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemVie
     val searchResultSource: ImageView = itemView.findViewById(R.id.sourceImageView)
     fun bind(searchResult: Track){
         searchResultTitle.text = searchResult.name
-        if (searchResult.source == "SPOTIFY") {
-            searchResultSource.setImageResource(R.drawable.spotify)
-        } else {
+        if (searchResult.source == "YOUTUBE") {
             searchResultSource.setImageResource(R.drawable.youtube)
+        } else {
+            searchResultSource.setImageResource(R.drawable.audius)
         }
     }
 }
