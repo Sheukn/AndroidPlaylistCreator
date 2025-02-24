@@ -7,19 +7,20 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.models.player.SearchResponse
+import com.example.androidplayistcreator.serivce.AudiusService
 import com.example.androidplayistcreator.serivce.YTDLPApiService
 import com.example.androidplayistcreator.views.recycler_view_adapters.SearchResultRvAdapter
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Locale
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -39,7 +40,7 @@ class SearchActivity : AppCompatActivity() {
         sourceButton = findViewById(R.id.sourceButton)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = SearchResultRvAdapter(emptyList()) { track ->
+        adapter = SearchResultRvAdapter(mutableListOf()) { track ->
             val resultIntent = Intent()
             resultIntent.putExtra("SELECTED_TRACK", track.toString())
             setResult(Activity.RESULT_OK, resultIntent)
@@ -65,39 +66,61 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun performSearch(query: String, source: String) {
-        val call = if (source == "YouTube") {
-            apiService.searchYoutubeVideos(query)
-        } else {
-            apiService.searchAudius(query)
-        }
+        if (source == "YouTube") {
+            val call = apiService.searchYoutubeVideos(query)
+            call.enqueue(object : Callback<SearchResponse> {
+                override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+                    if (response.isSuccessful) {
+                        val searchResults = response.body()?.results?.map {
+                            val videoId = it.url.split("v=").getOrNull(1)?.split("&")?.getOrNull(0) ?: ""
+                            Track(
+                                artist = it.artist,
+                                name = it.title,
+                                step = 1,  // Ajuste selon le besoin
+                                video_id = videoId,
+                                duration = it.duration,
+                                isSubTrack = false,
+                                source = "YOUTUBE"
+                            )
+                        } ?: emptyList()
+                        adapter.updateTracks(searchResults)
+                    } else {
+                        showAlert("Search failed", "Unable to fetch search results.")
+                    }
+                }
 
-        call.enqueue(object : Callback<SearchResponse> {
-            override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
-                if (response.isSuccessful) {
-                    val searchResults = response.body()?.results?.map {
-                        val videoId = it.url.split("v=").getOrNull(1)?.split("&")?.getOrNull(0) ?: ""
+                override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                    Log.e("SearchActivity", "Search failed", t)
+                    showAlert("Search failed", "Unable to fetch search results on YouTube")
+                }
+            })
+        } else {
+            // Audius search
+            val audiusService = AudiusService.api
+            lifecycleScope.launch {
+                try {
+                    val response = audiusService.searchTracks(query)
+                    val searchResults = response.data.map { track ->
                         Track(
-                            artist = it.artist,
-                            name = it.title,
-                            step = 1,  // Adjust as needed
-                            video_id = videoId,
-                            duration = it.duration,
+                            artist = track.user.name,
+                            name = track.title,
+                            step = 1,  // Ajuste selon le besoin
+                            video_id = track.id,  // Audius utilise `id`
+                            duration = track.duration.toString(),
                             isSubTrack = false,
-                            source = source.uppercase(Locale.getDefault())
+                            source = "AUDIUS"
                         )
-                    } ?: emptyList()
+                    }
                     adapter.updateTracks(searchResults)
-                } else {
-                    showAlert("Search failed", "Unable to fetch search results.")
+                    Log.d("SearchActivity", "Search results: $searchResults")
+                } catch (e: Exception) {
+                    Log.e("SearchActivity", "Search failed", e)
+                    showAlert("Search failed", "Unable to fetch search results on Audius")
                 }
             }
-
-            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                Log.e("SearchActivity", "Search failed", t)
-                showAlert("Search failed", "Unable to fetch search results.")
-            }
-        })
+        }
     }
+
 
     private fun showAlert(title: String, message: String) {
         AlertDialog.Builder(this)

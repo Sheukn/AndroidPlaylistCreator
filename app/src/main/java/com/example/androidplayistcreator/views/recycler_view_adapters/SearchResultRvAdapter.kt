@@ -8,7 +8,7 @@ import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.views.viewholders.SearchResultRvViewHolder
 
 class SearchResultRvAdapter(
-    private var searchResults: List<Track>,
+    private var searchResults: MutableList<Track>,
     private val onTrackSelected: (Track) -> Unit
 ) : RecyclerView.Adapter<SearchResultRvViewHolder>() {
 
@@ -18,7 +18,9 @@ class SearchResultRvAdapter(
     }
 
     fun updateTracks(newSearchResults: List<Track>) {
-        searchResults = newSearchResults
+        searchResults.clear()
+        searchResults.addAll(newSearchResults)
+        notifyDataSetChanged() // Met à jour la RecyclerView
     }
 
     override fun onBindViewHolder(holder: SearchResultRvViewHolder, position: Int) {
