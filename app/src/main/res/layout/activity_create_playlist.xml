@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/formPlaylistNameTextView"
-            android:text="Playlist Name : "
+            android:text="@string/playlist_name"
             android:textColor="@color/somewhatBeige"
             android:textSize="20sp" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/playlistNameEditText"
-            android:hint="Enter Playlist Name"
+            android:hint="@string/enter_playlist_name"
             android:background="@color/white"/>
     </LinearLayout>
 
@@ -69,7 +69,7 @@
         android:id="@+id/playlistCreateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Playlist"
+        android:text="@string/create_playlist"
         app:layout_constraintTop_toBottomOf="@id/addTrackButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
