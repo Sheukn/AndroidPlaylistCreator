@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.exoplayer)
-
+    implementation(libs.room)
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.sqlite)
     implementation(libs.androidx.sqlite.framework)
