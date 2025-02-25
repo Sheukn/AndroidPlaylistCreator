@@ -4,13 +4,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
-import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.database.entities.TrackEntity
 
 class SubTrackRvViewHolder (ItemView: View) : RecyclerView.ViewHolder(ItemView) {
     val dotView: View = itemView.findViewById(R.id.dotView)
     val trackTitle: TextView = itemView.findViewById(R.id.subTrackTextView)
 
-    fun bind(track: Track){
+    fun bind(track: TrackEntity){
         trackTitle.text = track.name
         val random = randomMethod()
         when(random){

@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.AppDatabase
-import com.example.androidplayistcreator.database.PlaylistDao
-import com.example.androidplayistcreator.models.Track
-import com.example.androidplayistcreator.views.recycler_view_adapters.TracksRvAdapter
+import com.example.androidplayistcreator.database.dao.PlaylistDao
+import com.example.androidplayistcreator.views.recycler_view_adapters.StepsRvAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +19,7 @@ import kotlinx.coroutines.withContext
 class TrackListActivity : AppCompatActivity() {
     private lateinit var playlistDao: PlaylistDao
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: TracksRvAdapter
+    private lateinit var adapter: StepsRvAdapter
     private var playlistId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,12 +28,11 @@ class TrackListActivity : AppCompatActivity() {
 
         playlistId = intent.getIntExtra("PLAYLIST_ID", 0)
 
-        // Initialize Room database and DAO
         playlistDao = AppDatabase.getInstance(this).playlistDao()
 
         recyclerView = findViewById(R.id.tracksRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TracksRvAdapter(emptyList())
+        adapter = StepsRvAdapter(emptyList())
         recyclerView.adapter = adapter
 
         findViewById<FloatingActionButton>(R.id.addTrackButton).setOnClickListener {
@@ -42,26 +40,26 @@ class TrackListActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE_ADD_TRACK)
         }
 
-        loadTracks()
+        loadSteps()
     }
 
-    private fun loadTracks() {
-        // Use Room DAO to get tracks for the given playlist ID
+    private fun loadSteps() {
         CoroutineScope(Dispatchers.IO).launch {
-            val playlistWithSteps = playlistDao.getPlaylistWithSteps(playlistId)
-            val tracks = playlistWithSteps?.steps?.flatMap { it.tracks } ?: emptyList()
-
-            // Update UI with tracks in the main thread
+            val playlistWithSteps = playlistDao.getPlaylist(playlistId)
+            Log.d("TrackListActivity", "Loaded playlist: $playlistWithSteps")
+            val steps = playlistWithSteps.steps?.distinctBy { it.step.id } ?: emptyList() // Filtrer par l'id de l'étape
+            Log.d("TrackListActivity", "Loaded steps: ${steps.size}")
             withContext(Dispatchers.Main) {
-                adapter.updateTracks(tracks)
+                adapter.updateTracks(steps)
             }
         }
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_TRACK && resultCode == RESULT_OK) {
-            loadTracks()  // Refresh track list after adding a new track
+            loadSteps()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.androidplayistcreator.views.viewholders
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +17,7 @@ class PlaylistsRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     // You can add methods to bind data if needed
     fun bind(playlist: PlaylistEntity) {
         playlistTitle.text = playlist.name
+        Log.d("PlaylistsRvViewHolder", "Playlist: $playlist")
         itemView.setOnClickListener {
             val context = itemView.context
             val intent = Intent(context, TrackListActivity::class.java).apply {

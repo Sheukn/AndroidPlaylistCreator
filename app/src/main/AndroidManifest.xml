@@ -17,7 +17,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".activities.SearchActivity"
+            android:name=".activities.PlaylistActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
 
         <activity android:name=".activities.PlayerActivity" android:exported="true"/>
         <activity android:name=".activities.TrackListActivity" android:exported="true"/>
-        <activity android:name=".activities.PlaylistActivity" android:exported="true"/>
+        <activity android:name=".activities.SearchActivity" android:exported="true"/>
 
     </application>
 
