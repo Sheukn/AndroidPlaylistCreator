@@ -16,6 +16,7 @@ interface PlaylistDao {
     @Query("SELECT * FROM PlaylistEntity WHERE id = :playlistId")
     suspend fun getPlaylist(playlistId: Int): PlaylistWithSteps
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylist(playlist: PlaylistEntity): Long
 
@@ -27,4 +28,22 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM PlaylistEntity")
     suspend fun getAllPlaylists(): List<PlaylistEntity>
+
+    @Query("DELETE FROM TrackEntity")
+    suspend fun deleteAllTracks()
+
+    @Query("DELETE FROM StepEntity")
+    suspend fun deleteAllSteps()
+
+    @Query("DELETE FROM PlaylistEntity")
+    suspend fun deleteAllPlaylists()
+
+    @Query("SELECT * FROM PlaylistEntity WHERE id = :playlistId")
+    suspend fun getPlaylistById(playlistId: Int): PlaylistEntity
+
+    @Query("SELECT * FROM StepEntity WHERE playlistId = :playlistId")
+    suspend fun getStepsByPlaylistId(playlistId: Int): List<StepEntity>
+
+    @Query("SELECT * FROM TrackEntity WHERE stepId = :stepId")
+    suspend fun getTracksByStepId(stepId: Int): List<TrackEntity>
 }

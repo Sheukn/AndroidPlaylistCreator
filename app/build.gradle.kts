@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
 }
-
 android {
     namespace = "com.example.androidplayistcreator"
     compileSdk = 35
@@ -62,7 +62,8 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.exoplayer)
     implementation(libs.room)
+    implementation(libs.roomKtx)
     implementation(libs.logging.interceptor)
-    implementation(libs.androidx.sqlite)
-    implementation(libs.androidx.sqlite.framework)
+    implementation(libs.androidx.room.runtime.v261)
+    ksp(libs.androidx.room.compiler.v261)
 }

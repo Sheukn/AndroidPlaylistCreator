@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class StepEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val step: Int,
-    val playlistId: Int
+    val playlistId: Int,
 )

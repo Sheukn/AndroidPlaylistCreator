@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.*
+import com.example.androidplayistcreator.database.relations.*
 
-@Database(entities = [PlaylistEntity::class, StepEntity::class, TrackEntity::class], version = 1)
+@Database(entities = [PlaylistEntity::class, StepEntity::class, TrackEntity::class], views = [StepWithTracks::class, PlaylistWithSteps::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun playlistDao(): PlaylistDao
 
@@ -21,10 +22,13 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "playlist_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration() // 🔥 WARNING: This will wipe existing data!
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
+
     }
 }

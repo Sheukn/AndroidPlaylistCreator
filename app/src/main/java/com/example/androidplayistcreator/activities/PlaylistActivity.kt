@@ -2,6 +2,7 @@ package com.example.androidplayistcreator.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.AppDatabase
+import com.example.androidplayistcreator.database.DatabaseMigrator
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.PlaylistEntity
 import com.example.androidplayistcreator.views.recycler_view_adapters.PlaylistsRvAdapter
@@ -37,16 +39,26 @@ class PlaylistActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Load playlists from the database
-        loadPlaylists()
+        CoroutineScope(Dispatchers.IO).launch {
+//            val deletor = DatabaseMigrator(this@PlaylistActivity)
+//            deletor.clearDatabase()
+            val migrator = DatabaseMigrator(this@PlaylistActivity)
+            migrator.migrate()
+            loadPlaylists()
+        }
+
     }
 
     private fun loadPlaylists() {
-        // Fetch playlists from the database in a background thread using coroutine
         CoroutineScope(Dispatchers.IO).launch {
-            val playlists = playlistDao.getAllPlaylists()  // Fetch all playlists from Room database
-
-            // Update the UI on the main thread
+            val playlists = playlistDao.getAllPlaylists()
+            val id = 1
+            val steps = playlistDao.getStepsByPlaylistId(id)
+            Log.d("PlaylistActivity", "Steps for playlist $id: ${steps.size}")
+            for (step in steps) {
+                val tracks = playlistDao.getTracksByStepId(step.id)
+                Log.d("PlaylistActivity", "Tracks for step ${step.id}: ${tracks.size}")
+            }
             withContext(Dispatchers.Main) {
                 updateRecyclerView(playlists)
             }
