@@ -1,5 +1,7 @@
 package com.example.androidplayistcreator.models
 
+import com.example.androidplayistcreator.database.entities.TrackEntity
+
 data class Track(
     val artist: String,
     val name: String,
@@ -20,6 +22,18 @@ data class Track(
                 duration = parts[4],
                 isSubTrack = parts[5].toBoolean(),
                 source = if (parts.size > 6) parts[6] else null
+            )
+        }
+
+        fun fromEntity(trackEntity: TrackEntity): Track {
+            return Track(
+                artist = trackEntity.artist,
+                name = trackEntity.name,
+                step = trackEntity.stepId,
+                video_id = trackEntity.videoId,
+                duration = trackEntity.duration,
+                isSubTrack = trackEntity.isSubTrack,
+                source = trackEntity.source
             )
         }
     }

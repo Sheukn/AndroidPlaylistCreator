@@ -43,6 +43,7 @@ class PlaylistActivity : AppCompatActivity() {
 //            val deletor = DatabaseMigrator(this@PlaylistActivity)
 //            deletor.clearDatabase()
             val migrator = DatabaseMigrator(this@PlaylistActivity)
+            migrator.clearDatabase()
             migrator.migrate()
             loadPlaylists()
         }
