@@ -37,7 +37,6 @@ class PlaylistActivity : AppCompatActivity() {
 
         // Initialize Room database and DAO
         playlistDao = AppDatabase.getInstance(this).playlistDao()
-
         userTextView = findViewById(R.id.userTextView)
         createPlaylistButton = findViewById(R.id.createPlaylistButton)
         bottomBar = findViewById(R.id.bottomBar)
@@ -47,12 +46,14 @@ class PlaylistActivity : AppCompatActivity() {
             startActivity(intent)
         }
         trackSingleton = TrackSingleton
+        setupBottomBar()
 
         CoroutineScope(Dispatchers.IO).launch {
             val migrator = DatabaseMigrator(this@PlaylistActivity)
             migrator.clearDatabase()
+            Log.d ("PlaylistActivity", "PlaylistDao: ${playlistDao.getAllTracks()}")
             migrator.migrate()
-            setupBottomBar()
+            Log.d ("PlaylistActivity", "PlaylistDao: ${playlistDao.getAllTracks()}")
             loadPlaylists()
         }
     }
@@ -74,17 +75,24 @@ class PlaylistActivity : AppCompatActivity() {
     }
 
     private fun setupBottomBar() {
-        if (TrackSingleton.getCurrentTrackId() != 0) {
-            bottomBarController = BottomBarController(bottomBar, TrackSingleton.getCurrentTrackId(), this)
-            bottomBarController.show()
-        } else {
-            bottomBar.visibility = ConstraintLayout.GONE
+        Log.d("PlaylistActivity", "Setting up bottom bar")
+        TrackSingleton.currentTrack.observe(this) { track ->
+            Log.d("PlaylistActivity", "Current track changed: ${TrackSingleton.currentTrack.value}")
+            val recyclerView: RecyclerView = findViewById(R.id.playlist_RecyclerView)
+            val layoutParams = recyclerView.layoutParams as ConstraintLayout.LayoutParams
+            if (track != null) {
+                layoutParams.matchConstraintPercentHeight = 0.35f
+                bottomBarController = BottomBarController(bottomBar, track.id, this)
+                bottomBarController.show()
+            } else {
+                layoutParams.matchConstraintPercentHeight = 0.5f
+                bottomBar.visibility = ConstraintLayout.GONE
+            }
         }
     }
-
     private fun updateRecyclerView(playlists: List<PlaylistEntity>) {
         val recyclerView: RecyclerView = findViewById(R.id.playlist_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = PlaylistsRvAdapter(playlists)  // No need to pass TrackSingleton
+        recyclerView.adapter = PlaylistsRvAdapter(playlists)  // No need to pass com.example.androidplayistcreator.models.TrackSingleton
     }
 }

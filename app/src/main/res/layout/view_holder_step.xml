@@ -52,6 +52,13 @@
                     android:text="Track Name"
                     android:textColor="@color/somewhatBeige"
                     android:textSize="20sp"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
                     app:layout_constraintBottom_toTopOf="@id/trackDurationTextView"
                     app:layout_constraintLeft_toRightOf="@id/trackCardView" />
 
@@ -75,7 +82,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/subTrackListCardView"
-        android:layout_width="250dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
         app:cardCornerRadius="@dimen/card_corner_radius"

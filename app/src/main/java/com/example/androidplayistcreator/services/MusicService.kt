@@ -23,7 +23,7 @@ class MusicService : Service() {
         exoPlayer.addListener(object : com.google.android.exoplayer2.Player.Listener {
             override fun onPlaybackStateChanged(state: Int) {
                 if (state == ExoPlayer.STATE_ENDED) {
-                    stopSelf() // Arrête le service quand la musique est terminée
+                    stopSelf()
                 }
             }
         })
@@ -64,10 +64,6 @@ class MusicService : Service() {
             .build()
     }
 
-    private fun updateTrackSingleton(track: TrackEntity) {
-        TrackSingleton.setCurrentTrack(track)
-    }
-
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -75,6 +71,12 @@ class MusicService : Service() {
         super.onDestroy()
         exoPlayer.release()
     }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        stopSelf()
+        super.onTaskRemoved(rootIntent)
+    }
+
 
     companion object {
         private const val NOTIFICATION_ID = 1

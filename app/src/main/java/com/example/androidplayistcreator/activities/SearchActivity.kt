@@ -53,11 +53,15 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupBottomBar() {
-        if (TrackSingleton.getCurrentTrackId() != 0) {
-            bottomBarController = BottomBarController(bottomBar, TrackSingleton.getCurrentTrackId(), this)
-            bottomBarController.show()
-        } else {
-            bottomBar.visibility = ConstraintLayout.GONE
+        Log.d("PlaylistActivity", "Setting up bottom bar")
+        TrackSingleton.currentTrack.observe(this) { track ->
+            Log.d("PlaylistActivity", "Current track changed: ${TrackSingleton.currentTrack.value}")
+            if (track != null) {
+                bottomBarController = BottomBarController(bottomBar, track.id, this)
+                bottomBarController.show()
+            } else {
+                bottomBar.visibility = ConstraintLayout.GONE
+            }
         }
     }
 

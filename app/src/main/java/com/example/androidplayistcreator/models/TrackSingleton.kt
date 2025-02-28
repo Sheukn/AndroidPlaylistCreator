@@ -1,22 +1,35 @@
 package com.example.androidplayistcreator.models
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import android.os.Handler
+import android.os.Looper
 import com.example.androidplayistcreator.database.entities.TrackEntity
 
 object TrackSingleton {
-    private var currentTrack: TrackEntity? = null
+    private val _currentTrack = MutableLiveData<TrackEntity?>()
+    val currentTrack: LiveData<TrackEntity?> = _currentTrack  // Exposed LiveData
 
-    // Get the current track
+    private val mainHandler = Handler(Looper.getMainLooper())  // Ensure main thread execution
+
     fun getCurrentTrackId(): Int {
-        return currentTrack?.id ?: 0
+        return _currentTrack.value?.id ?: 0
     }
 
-    // Set the current track
+    fun getCurrentTrack(): TrackEntity? {
+        return _currentTrack.value
+    }
+
     fun setCurrentTrack(track: TrackEntity) {
-        currentTrack = track
+        mainHandler.post {  // Ensure update happens on main thread
+            _currentTrack.value = track
+        }
     }
 
-    // Clear the current track
     fun clearTrack() {
-        currentTrack = null
+        mainHandler.post {  // Ensure update happens on main thread
+            _currentTrack.value = null
+        }
     }
 }
+

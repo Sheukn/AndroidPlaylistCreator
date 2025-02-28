@@ -25,6 +25,11 @@ class StepViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackTextView.text = mainTrack?.name
         trackDurationTextView.text = mainTrack?.duration
 
+        trackTextView.post {
+            if (trackTextView.layout != null && trackTextView.width < trackTextView.paint.measureText(mainTrack?.name ?: "")) {
+                trackTextView.isSelected = true  // Ensures marquee effect starts
+            }
+        }
         if (subTracks.isNotEmpty()) {
             subTrackCardView.visibility = View.VISIBLE // Show sub-track card
             val adapter = SubTrackListRvAdapter(subTracks)

@@ -19,6 +19,14 @@ class PlaylistsRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         playlistTitle.text = playlist.name
         Log.d("PlaylistsRvViewHolder", "Playlist: $playlist")
         val currentTrackId = TrackSingleton.getCurrentTrackId()
+
+        // Check if the text is wider than the container and post a scroll if necessary
+        playlistTitle.post {
+            if (playlistTitle.layout != null && playlistTitle.width < playlistTitle.paint.measureText(playlist.name)) {
+                playlistTitle.isSelected = true  // This ensures the marquee effect starts
+            }
+        }
+
         itemView.setOnClickListener {
             val context = itemView.context
             val intent = Intent(context, TrackListActivity::class.java).apply {
@@ -29,4 +37,5 @@ class PlaylistsRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             context.startActivity(intent)
         }
     }
+
 }

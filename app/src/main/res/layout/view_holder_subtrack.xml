@@ -7,8 +7,8 @@
 
     <View
         android:id="@+id/dotView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -32,15 +32,19 @@
 
             <TextView
                 android:id="@+id/subTrackTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/madimi_regular"
                 android:text="Title - artist"
                 android:textColor="@color/somewhatBeige"
-                android:textSize="25sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/dotView"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="13sp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true" />
         </LinearLayout>
 
 

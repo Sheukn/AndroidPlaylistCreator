@@ -47,7 +47,15 @@
                     android:fontFamily="@font/madimi_regular"
                     android:text="Playlist Title"
                     android:textColor="@color/somewhatBeige"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"/>
+
 
             </LinearLayout>
         </LinearLayout>

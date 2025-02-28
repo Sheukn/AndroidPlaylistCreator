@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
@@ -71,6 +72,7 @@ class PlayerActivity : AppCompatActivity() {
         playerView.player = exoPlayer
 
         // Auto-play the first track
+        Log.d("PlayerActivity", "Playing track: ${currentStep.mainTrack}")
         playTrack(currentStep.mainTrack)
 
         playButton.setOnClickListener {
@@ -117,6 +119,7 @@ class PlayerActivity : AppCompatActivity() {
             stepId = track.step
         )
         TrackSingleton.setCurrentTrack(trackEntity)
+        Log.d("PlayerActivity", "Playing track: ${TrackSingleton.getCurrentTrack()}")
         fetchAudioStream(track.video_id, track.source ?: "AUDIUS")
     }
 
@@ -159,7 +162,6 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        TrackSingleton.clearTrack()
         exoPlayer.release()
     }
 }

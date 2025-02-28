@@ -12,11 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
-import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.models.TrackSingleton
 import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.StepsRvAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,11 +58,19 @@ class TrackListActivity : AppCompatActivity() {
     }
 
     private fun setupBottomBar() {
-        if (TrackSingleton.getCurrentTrackId() != 0) {
-            bottomBarController = BottomBarController(bottomBar, TrackSingleton.getCurrentTrackId(), this)
-            bottomBarController.show()
-        } else {
-            bottomBar.visibility = View.GONE
+        Log.d("PlaylistActivity", "Setting up bottom bar")
+        TrackSingleton.currentTrack.observe(this) { track ->
+            val recyclerView: RecyclerView = findViewById(R.id.tracksRecyclerView)
+            val layoutParams = recyclerView.layoutParams as ConstraintLayout.LayoutParams
+            Log.d("PlaylistActivity", "Current track changed: ${TrackSingleton.currentTrack.value}")
+            if (track != null) {
+                layoutParams.matchConstraintPercentHeight = 0.45f
+                bottomBarController = BottomBarController(bottomBar, track.id, this)
+                bottomBarController.show()
+            } else {
+                layoutParams.matchConstraintPercentHeight = 0.55f
+                bottomBar.visibility = ConstraintLayout.GONE
+            }
         }
     }
 

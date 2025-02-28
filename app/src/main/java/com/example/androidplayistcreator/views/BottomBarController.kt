@@ -1,6 +1,7 @@
 package com.example.androidplayistcreator.views
 
 import android.content.Context
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +15,7 @@ import kotlinx.coroutines.withContext
 
 class BottomBarController(
     private val bottomBar: ConstraintLayout,
-    private val trackId : String,
+    private val trackId : Int,
     private val context: Context
 ) {
     private val audioTitleTextView: TextView = bottomBar.findViewById(R.id.audioTitleTextView)
@@ -29,6 +30,7 @@ class BottomBarController(
     private fun loadTrack() {
         CoroutineScope(Dispatchers.IO).launch {
             val track = playlistDao.getTrackById(trackId)
+            Log.d("BottomBarController", "Loaded track: $track")
             withContext(Dispatchers.Main) {
                 track.let {
                     audioTitleTextView.text = it.name

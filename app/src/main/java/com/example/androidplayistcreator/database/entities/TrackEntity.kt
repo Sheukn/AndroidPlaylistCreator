@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class TrackEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val id: Int,
     val artist: String,
     val name: String,
     val stepId: Int,

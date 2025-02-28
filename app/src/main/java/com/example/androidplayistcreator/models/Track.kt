@@ -16,6 +16,7 @@ data class Track(
         fun fromString(trackString: String): Track {
             val parts = trackString.split("|")
             return Track(
+                id = -1,
                 artist = parts[0],
                 name = parts[1],
                 step = parts[2].toInt(),
@@ -28,6 +29,7 @@ data class Track(
 
         fun fromEntity(trackEntity: TrackEntity): Track {
             return Track(
+                id = trackEntity.id,
                 artist = trackEntity.artist,
                 name = trackEntity.name,
                 step = trackEntity.stepId,

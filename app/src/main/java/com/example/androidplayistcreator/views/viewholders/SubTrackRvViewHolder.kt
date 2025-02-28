@@ -12,6 +12,12 @@ class SubTrackRvViewHolder (ItemView: View) : RecyclerView.ViewHolder(ItemView) 
 
     fun bind(track: TrackEntity){
         trackTitle.text = track.name
+
+        trackTitle.post {
+            if (trackTitle.layout != null && trackTitle.width < trackTitle.paint.measureText(track.name)) {
+                trackTitle.isSelected = true  // Ensures marquee effect starts
+            }
+        }
         val random = randomMethod()
         when(random){
             1 -> dotView.setBackgroundResource(R.drawable.blue_circle_dot)

@@ -17,13 +17,12 @@ interface PlaylistDao {
     suspend fun getPlaylist(playlistId: Int): PlaylistWithSteps
   
     @Transaction
-    @Query("SELECT * FROM TrackEntity WHERE id IN (:trackIds)")
-    suspend fun getTracksByIds(trackIds: List<Int>): List<TrackEntity>
+    @Query("SELECT * FROM TrackEntity")
+    suspend fun getAllTracks(): List<TrackEntity>
 
     @Transaction
     @Query("SELECT * FROM TrackEntity WHERE id = :trackId")
-    suspend fun getTrackById(trackId: String): TrackEntity
-
+    suspend fun getTrackById(trackId: Int): TrackEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylist(playlist: PlaylistEntity): Long
