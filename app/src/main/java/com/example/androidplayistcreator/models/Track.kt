@@ -4,13 +4,15 @@ import com.example.androidplayistcreator.database.entities.TrackEntity
 
 data class Track(
     val id: Int? = null,
-    val artist: String,
+    val artist: String? = null,
     val name: String,
-    val step: Int,
-    val video_id: String,
+    val audiusId: String,
     val duration: String,
+    val isStreamble: Boolean,
+    val step: Int,
     val isSubTrack: Boolean,
-    val source: String? = null
+    val source: String?,
+    val artwork: String?
 ) {
     companion object {
         fun fromString(trackString: String): Track {
@@ -20,10 +22,12 @@ data class Track(
                 artist = parts[0],
                 name = parts[1],
                 step = parts[2].toInt(),
-                video_id = parts[3],
+                audiusId = parts[3],
                 duration = parts[4],
                 isSubTrack = parts[5].toBoolean(),
-                source = if (parts.size > 6) parts[6] else null
+                source = if (parts.size > 6) parts[6] else null,
+                isStreamble = parts[7].toBoolean(),
+                artwork = if (parts.size > 8) parts[8] else null
             )
         }
 
@@ -32,16 +36,19 @@ data class Track(
                 id = trackEntity.id,
                 artist = trackEntity.artist,
                 name = trackEntity.name,
-                step = trackEntity.stepId,
-                video_id = trackEntity.video_id,
+                audiusId = trackEntity.audiusId,
                 duration = trackEntity.duration,
+                isStreamble = trackEntity.isStreamable,
+                step = trackEntity.stepId,
                 isSubTrack = trackEntity.isSubTrack,
-                source = trackEntity.source
+                source = trackEntity.source,
+                artwork = trackEntity.artwork
             )
         }
     }
 
     override fun toString(): String {
-        return listOf(artist, name, step, video_id, duration, isSubTrack, source).joinToString("|")
+        return listOf(artist, name, step, audiusId, duration, isSubTrack , source, isStreamble, artwork)
+            .joinToString("|") { it.toString() }
     }
 }

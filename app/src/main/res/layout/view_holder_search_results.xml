@@ -41,7 +41,9 @@
             android:singleLine="true"
             android:text="test"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/madimi_regular"
+            />
 
     </FrameLayout>
 

@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:layout_margin="0dp" />
 
-    <!-- Track Name TextView -->
+    <!-- com.example.androidplayistcreator.models.Track Name TextView -->
     <TextView
         android:id="@+id/PlaylistNameTextView"
         android:layout_width="wrap_content"

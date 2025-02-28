@@ -112,15 +112,17 @@ class PlayerActivity : AppCompatActivity() {
             id = track.id ?: 0, // Ensure id is not null
             name = track.name,
             artist = track.artist ?: "Unknown",
-            video_id = track.video_id,
+            audiusId= track.audiusId,
             source = track.source ?: "AUDIUS",
             duration = track.duration,
             isSubTrack = track.isSubTrack,
-            stepId = track.step
+            stepId = track.step,
+            isStreamable = track.isStreamble,
+            artwork = track.artwork
         )
         TrackSingleton.setCurrentTrack(trackEntity)
         Log.d("PlayerActivity", "Playing track: ${TrackSingleton.getCurrentTrack()}")
-        fetchAudioStream(track.video_id, track.source ?: "AUDIUS")
+        fetchAudioStream(track.audiusId, track.source ?: "AUDIUS")
     }
 
     private fun fetchAudioStream(videoId: String, source: String) {
