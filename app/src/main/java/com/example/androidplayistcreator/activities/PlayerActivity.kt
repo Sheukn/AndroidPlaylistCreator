@@ -77,8 +77,10 @@ class PlayerActivity : AppCompatActivity() {
 
         playButton.setOnClickListener {
             if (isPlaying) {
+                playButton.setImageResource(R.drawable.play_button)
                 exoPlayer.pause()
             } else {
+                playButton.setImageResource(R.drawable.pause_button)
                 exoPlayer.play()
             }
             isPlaying = !isPlaying

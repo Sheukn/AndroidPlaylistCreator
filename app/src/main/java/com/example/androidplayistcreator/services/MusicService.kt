@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.example.androidplayistcreator.R
-import com.example.androidplayistcreator.database.entities.TrackEntity
-import com.example.androidplayistcreator.models.TrackSingleton
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 
@@ -42,9 +40,6 @@ class MusicService : Service() {
         exoPlayer.setMediaItem(mediaItem)
         exoPlayer.prepare()
         exoPlayer.play()
-
-        // Met à jour le singleton avec les infos du morceau en cours
-
     }
 
 

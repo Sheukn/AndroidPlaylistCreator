@@ -1,61 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/deepBlue">
 
-    <!-- ExoPlayer View -->
+    <TextView
+        android:id="@+id/applicationNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/madimi_regular"
+        android:text="Application Name"
+        android:textColor="@color/somewhatBeige"
+        android:textSize="40sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/trackArtworkImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintBottom_toTopOf="@id/exoPlayerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/applicationNameTextView"
+        android:layout_marginTop="20dp"
+        />
+
+
     <com.google.android.exoplayer2.ui.PlayerView
+        android:layout_marginTop="20dp"
+
         android:id="@+id/exoPlayerView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_centerInParent="true"
-        android:layout_margin="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/trackArtworkImageView" />
 
-    <!-- com.example.androidplayistcreator.models.Track Name TextView -->
     <TextView
         android:id="@+id/PlaylistNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/exoPlayerView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:fontFamily="@font/madimi_regular"
+        android:text="Playlist Name"
         android:textColor="@color/somewhatBeige"
         android:textSize="40sp"
-        android:text="Playlist Name"
-        />
+        app:layout_constraintBottom_toTopOf="@id/TrackNameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exoPlayerView"
+/>
 
+    <!-- Track Name TextView -->
     <TextView
         android:id="@+id/TrackNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/PlaylistNameTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:fontFamily="@font/madimi_regular"
         android:text="Track Name"
         android:textColor="@color/somewhatBeige"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/PlaylistNameTextView"
+        android:layout_marginTop="20dp"/>
 
+    <!-- SeekBar -->
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/TrackNameTextView"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:progressTint="@color/somewhatBeige"
+        android:thumbTint="@color/somewhatBeige"
+        android:background="@color/lighterOrange"
+        app:layout_constraintBottom_toTopOf="@id/playButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TrackNameTextView"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="20dp"
+        />
 
-    <!-- Play/Pause Button using play_button drawable -->
+    <!-- Play/Pause Button -->
     <ImageView
         android:id="@+id/playButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/seekBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/play_button" />
+        android:src="@drawable/play_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        android:layout_marginTop="20dp"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
