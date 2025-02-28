@@ -53,14 +53,13 @@ class TrackListActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val playlistWithSteps = playlistDao.getPlaylist(playlistId)
             Log.d("TrackListActivity", "Loaded playlist: $playlistWithSteps")
-            val steps = playlistWithSteps.steps.distinctBy { it.step.id } ?: emptyList() // Filtrer par l'id de l'étape
+            val steps = playlistWithSteps.steps?.distinctBy { it.step.id } ?: emptyList() // Filtrer par l'id de l'étape
             Log.d("TrackListActivity", "Loaded steps: ${steps.size}")
             withContext(Dispatchers.Main) {
                 adapter.updateTracks(steps)
             }
         }
     }
-
     private fun startPlaylist() {
         if (adapter.itemCount == 0) {
             //alors vide donc on ne peut pas démarrer la lecture

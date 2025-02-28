@@ -19,8 +19,6 @@ class DatabaseMigrator(context: Context) {
             StepEntity(step = 2, playlistId = 1),
             StepEntity(step = 3, playlistId = 1),
             StepEntity(step = 1, playlistId = 2),
-            StepEntity(step = 2, playlistId = 2),
-            StepEntity(step = 3, playlistId = 2),
         )
         val stepIds = dao.insertSteps(steps)
 
@@ -36,7 +34,6 @@ class DatabaseMigrator(context: Context) {
             TrackEntity(artist = "Ugliifroot", name = "A-HA - TAKE ON ME [TH!S COVER]", stepId = stepIds[3].toInt(), videoId = "lZ4jK", duration = "2:45", isSubTrack = true, source = Source.AUDIUS.toString()),
             TrackEntity(artist = "Djtaddaa", name = "Baby Shark", stepId = stepIds[4].toInt(), videoId = "W06bv", duration = "2:45", isSubTrack = false, source = Source.AUDIUS.toString()),
             TrackEntity(artist = "B-rizzle", name = "Under Pressure", stepId = stepIds[5].toInt(), videoId = "P5joQNp", duration = "2:45", isSubTrack = false, source = Source.AUDIUS.toString()),
-
             )
         dao.insertTracks(tracks)
     }
