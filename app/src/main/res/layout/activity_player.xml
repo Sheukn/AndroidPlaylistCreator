@@ -8,29 +8,50 @@
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/exoPlayerView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
         android:layout_centerInParent="true"
-        android:layout_margin="16dp" />
+        android:layout_margin="0dp" />
 
     <!-- Track Name TextView -->
     <TextView
-        android:id="@+id/TrackNameTextView"
+        android:id="@+id/PlaylistNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/exoPlayerView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/madimi_regular"
-        android:text="Track Name"
         android:textColor="@color/somewhatBeige"
         android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/TrackNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PlaylistNameTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/madimi_regular"
+        android:text="Track Name"
+        android:textColor="@color/somewhatBeige"
+        android:textSize="26sp" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TrackNameTextView"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
 
     <!-- Play/Pause Button using play_button drawable -->
     <ImageView
         android:id="@+id/playButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/TrackNameTextView"
+        android:layout_below="@id/seekBar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:src="@drawable/play_button" />

@@ -13,4 +13,8 @@ object AudiusService {
         .build()
 
     val api: AudiusApi = retrofit.create(AudiusApi::class.java)
+
+    fun getStreamUrl(trackId: String): String {
+        return "https://discoveryprovider.audius.co/v1/tracks/$trackId/stream"
+    }
 }

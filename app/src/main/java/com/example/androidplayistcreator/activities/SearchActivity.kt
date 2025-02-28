@@ -159,11 +159,11 @@ class SearchActivity : AppCompatActivity() {
                 val response = AudiusService.api.searchTracks(query)
                 val searchResults = response.data.map { track ->
                     Track(
-                        artist = track.user.name,
+                        artist = track.artist.name,
                         name = track.title,
                         step = 1,
                         video_id = track.id,
-                        duration = track.duration.toString(),
+                        duration = "0",
                         isSubTrack = false,
                         source = SOURCE_AUDIUS
                     )
