@@ -1,5 +1,6 @@
 package com.example.androidplayistcreator.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,12 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.dao.PlaylistDao
+import com.example.androidplayistcreator.database.entities.TrackEntity
 import com.example.androidplayistcreator.database.relations.PlaylistWithSteps
-import com.example.androidplayistcreator.database.relations.StepWithTracks
 import com.example.androidplayistcreator.models.Source
 import com.example.androidplayistcreator.models.Step
 import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.models.TrackSingleton
 import com.example.androidplayistcreator.serivce.AudiusService
+import com.example.androidplayistcreator.serivce.MusicService
 import com.example.androidplayistcreator.serivce.YTDLPApiService
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -39,6 +42,7 @@ class PlayerActivity : AppCompatActivity() {
     private val ytDlpApiService = YTDLPApiService.create()
     private lateinit var currentStep: Step
     private var currentTrackIndex = 0
+    private var currentTrack: TrackEntity? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +61,7 @@ class PlayerActivity : AppCompatActivity() {
         seekBar = findViewById(R.id.seekBar)
         trackNameTextView = findViewById(R.id.TrackNameTextView)
         PlaylistNameTextView = findViewById(R.id.PlaylistNameTextView)
+
 
         PlaylistNameTextView.text = playlistWithSteps.playlist.name
         currentStep = Step.fromStepsWithTracksEntity(playlistWithSteps.steps[0])
@@ -102,6 +107,17 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun playTrack(track: Track) {
         trackNameTextView.text = track.name
+        val trackEntity = TrackEntity(
+            id = track.id ?: 0, // Ensure id is not null
+            name = track.name,
+            artist = track.artist ?: "Unknown",
+            video_id = track.video_id,
+            source = track.source ?: "AUDIUS",
+            duration = track.duration,
+            isSubTrack = track.isSubTrack,
+            stepId = track.step
+        )
+        TrackSingleton.setCurrentTrack(trackEntity)
         fetchAudioStream(track.video_id, track.source ?: "AUDIUS")
     }
 
@@ -122,12 +138,12 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun playAudio(audioUrl: String) {
-        val mediaItem = MediaItem.fromUri(audioUrl)
-        exoPlayer.setMediaItem(mediaItem)
-        exoPlayer.prepare()
-        exoPlayer.play()
-        isPlaying = true
+        val intent = Intent(this, MusicService::class.java).apply {
+            putExtra("AUDIO_URL", audioUrl)
+        }
+        startService(intent)
     }
+
 
     private fun updateSeekBar() {
         handler.postDelayed({
@@ -144,6 +160,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        TrackSingleton.clearTrack()
         exoPlayer.release()
     }
 }

@@ -9,14 +9,17 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.models.TrackSingleton
 import com.example.androidplayistcreator.models.player.SearchResponse
 import com.example.androidplayistcreator.serivce.AudiusService
 import com.example.androidplayistcreator.serivce.YTDLPApiService
+import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.SearchResultRvAdapter
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -35,15 +38,27 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchButton: Button
     private lateinit var audiusCheckBox: CheckBox
     private lateinit var youtubeCheckBox: CheckBox
+    private lateinit var bottomBarController: BottomBarController
+    private lateinit var bottomBar: ConstraintLayout
 
     private val apiService = YTDLPApiService.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_research)
-
+        bottomBar = findViewById(R.id.bottomBar)
         setupViews()
         setupListeners()
+        setupBottomBar()
+    }
+
+    private fun setupBottomBar() {
+        if (TrackSingleton.getCurrentTrackId() != 0) {
+            bottomBarController = BottomBarController(bottomBar, TrackSingleton.getCurrentTrackId(), this)
+            bottomBarController.show()
+        } else {
+            bottomBar.visibility = ConstraintLayout.GONE
+        }
     }
 
     private fun setupViews() {

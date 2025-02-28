@@ -9,9 +9,9 @@ data class TrackEntity(
     val artist: String,
     val name: String,
     val stepId: Int,
-    val videoId: String,
+    val video_id: String,
     val duration: String,
     val isSubTrack: Boolean,
-    val source: String?
+    val source: String? = null
 )
 

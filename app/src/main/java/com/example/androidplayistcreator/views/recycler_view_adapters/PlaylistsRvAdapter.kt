@@ -7,7 +7,7 @@ import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.entities.PlaylistEntity
 import com.example.androidplayistcreator.views.viewholders.PlaylistsRvViewHolder
 
-class PlaylistsRvAdapter(val playlists: List<PlaylistEntity>):
+class PlaylistsRvAdapter(val playlists: List<PlaylistEntity>) :
     RecyclerView.Adapter<PlaylistsRvViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistsRvViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_playlist, parent, false)

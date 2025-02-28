@@ -20,6 +20,11 @@ interface PlaylistDao {
     @Query("SELECT * FROM TrackEntity WHERE id IN (:trackIds)")
     suspend fun getTracksByIds(trackIds: List<Int>): List<TrackEntity>
 
+    @Transaction
+    @Query("SELECT * FROM TrackEntity WHERE id = :trackId")
+    suspend fun getTrackById(trackId: String): TrackEntity
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylist(playlist: PlaylistEntity): Long
 

@@ -8,7 +8,7 @@ import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.*
 import com.example.androidplayistcreator.database.relations.*
 
-@Database(entities = [PlaylistEntity::class, StepEntity::class, TrackEntity::class], views = [StepWithTracks::class, PlaylistWithSteps::class], version = 3)
+@Database(entities = [PlaylistEntity::class, StepEntity::class, TrackEntity::class], views = [StepWithTracks::class, PlaylistWithSteps::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun playlistDao(): PlaylistDao
 

@@ -3,6 +3,7 @@ package com.example.androidplayistcreator.models
 import com.example.androidplayistcreator.database.entities.TrackEntity
 
 data class Track(
+    val id: Int? = null,
     val artist: String,
     val name: String,
     val step: Int,
@@ -30,7 +31,7 @@ data class Track(
                 artist = trackEntity.artist,
                 name = trackEntity.name,
                 step = trackEntity.stepId,
-                video_id = trackEntity.videoId,
+                video_id = trackEntity.video_id,
                 duration = trackEntity.duration,
                 isSubTrack = trackEntity.isSubTrack,
                 source = trackEntity.source

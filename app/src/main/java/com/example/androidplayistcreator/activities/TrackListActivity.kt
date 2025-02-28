@@ -3,13 +3,18 @@ package com.example.androidplayistcreator.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.models.TrackSingleton
+import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.StepsRvAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -23,31 +28,46 @@ class TrackListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: StepsRvAdapter
     private var playlistId: Int = 0
+    private lateinit var bottomBarController: BottomBarController
+    private lateinit var bottomBar: ConstraintLayout
+    private lateinit var addTrackButton : ImageView
+    private lateinit var startPlaylistButton : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracks)
 
         playlistId = intent.getIntExtra("PLAYLIST_ID", 0)
-
         playlistDao = AppDatabase.getInstance(this).playlistDao()
-
         recyclerView = findViewById(R.id.tracksRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = StepsRvAdapter(emptyList())
+        addTrackButton = findViewById(R.id.addTrackButton)
+        startPlaylistButton = findViewById(R.id.startPlaylistButton)
         recyclerView.adapter = adapter
+        bottomBar = findViewById(R.id.bottomBar)
 
-        findViewById<FloatingActionButton>(R.id.addTrackButton).setOnClickListener {
+        addTrackButton.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_ADD_TRACK)
         }
-        findViewById<FloatingActionButton>(R.id.startPlaylistButton).setOnClickListener {
+        startPlaylistButton.setOnClickListener {
             startPlaylist()
         }
 
-
+        setupBottomBar()
         loadSteps()
     }
+
+    private fun setupBottomBar() {
+        if (TrackSingleton.getCurrentTrackId() != 0) {
+            bottomBarController = BottomBarController(bottomBar, TrackSingleton.getCurrentTrackId(), this)
+            bottomBarController.show()
+        } else {
+            bottomBar.visibility = View.GONE
+        }
+    }
+
 
     private fun loadSteps() {
         CoroutineScope(Dispatchers.IO).launch {
