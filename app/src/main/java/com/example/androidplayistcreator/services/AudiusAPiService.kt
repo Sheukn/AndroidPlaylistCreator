@@ -1,4 +1,4 @@
-package com.example.androidplayistcreator.serivce
+package com.example.androidplayistcreator.services
 
 import com.example.androidplayistcreator.apis.AudiusApi
 import retrofit2.Retrofit

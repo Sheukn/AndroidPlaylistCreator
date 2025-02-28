@@ -1,9 +1,8 @@
-package com.example.androidplayistcreator.serivce
+package com.example.androidplayistcreator.services
 
 import android.app.*
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.entities.TrackEntity
@@ -33,7 +32,6 @@ class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val audioUrl = intent?.getStringExtra("AUDIO_URL")
         if (!audioUrl.isNullOrEmpty()) {
-            TrackSingleton.setCurrentTrack(audioUrl)
             playAudio(audioUrl)
         }
         return START_STICKY

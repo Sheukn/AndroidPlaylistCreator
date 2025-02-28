@@ -1,4 +1,4 @@
-package com.example.androidplayistcreator.serivce
+package com.example.androidplayistcreator.services
 
 import com.example.androidplayistcreator.models.player.AudioResponse
 import com.example.androidplayistcreator.models.player.SearchResponse

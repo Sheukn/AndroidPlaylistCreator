@@ -17,8 +17,8 @@ import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.models.TrackSingleton
 import com.example.androidplayistcreator.models.player.SearchResponse
-import com.example.androidplayistcreator.serivce.AudiusService
-import com.example.androidplayistcreator.serivce.YTDLPApiService
+import com.example.androidplayistcreator.services.AudiusService
+import com.example.androidplayistcreator.services.YTDLPApiService
 import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.SearchResultRvAdapter
 import kotlinx.coroutines.launch

@@ -18,11 +18,10 @@ import com.example.androidplayistcreator.models.Source
 import com.example.androidplayistcreator.models.Step
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.models.TrackSingleton
-import com.example.androidplayistcreator.serivce.AudiusService
-import com.example.androidplayistcreator.serivce.MusicService
-import com.example.androidplayistcreator.serivce.YTDLPApiService
+import com.example.androidplayistcreator.services.AudiusService
+import com.example.androidplayistcreator.services.MusicService
+import com.example.androidplayistcreator.services.YTDLPApiService
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.gson.Gson
