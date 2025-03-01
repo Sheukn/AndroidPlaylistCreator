@@ -8,7 +8,7 @@ data class Track(
     val name: String,
     val audiusId: String,
     val duration: String,
-    val isStreamble: Boolean,
+    val isStreamable: Boolean,
     val step: Int,
     val isSubTrack: Boolean,
     val source: String?,
@@ -26,7 +26,7 @@ data class Track(
                 duration = parts[4],
                 isSubTrack = parts[5].toBoolean(),
                 source = if (parts.size > 6) parts[6] else null,
-                isStreamble = parts[7].toBoolean(),
+                isStreamable = parts[7].toBoolean(),
                 artwork = if (parts.size > 8) parts[8] else null
             )
         }
@@ -38,7 +38,7 @@ data class Track(
                 name = trackEntity.name,
                 audiusId = trackEntity.audiusId,
                 duration = trackEntity.duration,
-                isStreamble = trackEntity.isStreamable,
+                isStreamable = trackEntity.isStreamable,
                 step = trackEntity.stepId,
                 isSubTrack = trackEntity.isSubTrack,
                 source = trackEntity.source,
@@ -48,7 +48,7 @@ data class Track(
     }
 
     override fun toString(): String {
-        return listOf(artist, name, step, audiusId, duration, isSubTrack , source, isStreamble, artwork)
+        return listOf(artist, name, step, audiusId, duration, isSubTrack , source, isStreamable, artwork)
             .joinToString("|") { it.toString() }
     }
 }

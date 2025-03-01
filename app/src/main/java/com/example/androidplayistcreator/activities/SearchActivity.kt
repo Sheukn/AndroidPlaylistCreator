@@ -113,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
                         duration = "0",
                         isSubTrack = false,
                         source = SOURCE_AUDIUS,
-                        isStreamble = track.isStreamble,
+                        isStreamable = track.isStreamble,
                         artwork = track.artwork?.`1000x1000` ?: track.artwork?.`480x480`
                         ?: track.artwork?.`150x150` ?: "No artwork"
                     )

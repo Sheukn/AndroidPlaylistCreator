@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
@@ -35,7 +36,14 @@ class BottomBarController(
                 track.let {
                     audioTitleTextView.text = it.name
                     audioArtistTextView.text = it.artist
+                    Glide.with(context).load(it.artwork).into(audioImageView)
+                }
 
+                audioTitleTextView.post {
+                    val trackName = audioTitleTextView.text.toString()
+                    if (audioTitleTextView.layout != null && audioTitleTextView.width < audioTitleTextView.paint.measureText(trackName)) {
+                        audioTitleTextView.isSelected = true
+                    }
                 }
             }
         }

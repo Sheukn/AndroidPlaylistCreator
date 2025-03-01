@@ -1,8 +1,12 @@
 package com.example.androidplayistcreator.activities
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
@@ -11,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.TrackEntity
@@ -29,21 +34,19 @@ import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 class PlayerActivity : AppCompatActivity() {
-    private lateinit var playlistDao: PlaylistDao
-
-    private lateinit var exoPlayer: ExoPlayer
-    private lateinit var playerView: PlayerView
     private lateinit var playButton: ImageView
     private lateinit var seekBar: SeekBar
     private lateinit var trackNameTextView: TextView
     private lateinit var PlaylistNameTextView: TextView
+    private lateinit var trackArtworkImageView: ImageView
+
     private var isPlaying = false
     private val handler = Handler(Looper.getMainLooper())
-    private val ytDlpApiService = YTDLPApiService.create()
     private lateinit var currentStep: Step
     private var currentTrackIndex = 0
     private var currentTrack: TrackEntity? = null
-
+    private var musicService: MusicService? = null
+    private var serviceBound = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,118 +57,85 @@ class PlayerActivity : AppCompatActivity() {
         val playlistWithSteps = gson.fromJson(playlistJson, PlaylistWithSteps::class.java)
         println("Loaded playlist: $playlistWithSteps")
 
-
-
-        playerView = findViewById(R.id.exoPlayerView)
         playButton = findViewById(R.id.playButton)
         seekBar = findViewById(R.id.seekBar)
         trackNameTextView = findViewById(R.id.TrackNameTextView)
         PlaylistNameTextView = findViewById(R.id.PlaylistNameTextView)
-
+        trackArtworkImageView = findViewById(R.id.trackArtworkImageView)
 
         PlaylistNameTextView.text = playlistWithSteps.playlist.name
         currentStep = Step.fromStepsWithTracksEntity(playlistWithSteps.steps[0])
         trackNameTextView.text = currentStep.mainTrack.name
 
-        // Initialize ExoPlayer
-        exoPlayer = ExoPlayer.Builder(this).build()
-        playerView.player = exoPlayer
+        PlaylistNameTextView.post {
+            if (PlaylistNameTextView.layout != null && PlaylistNameTextView.width < PlaylistNameTextView.paint.measureText(playlistWithSteps.playlist.name)) {
+                PlaylistNameTextView.isSelected = true  // Ensures marquee effect starts
+            }
+        }
 
-        // Auto-play the first track
-        Log.d("PlayerActivity", "Playing track: ${currentStep.mainTrack}")
-        playTrack(currentStep.mainTrack)
+        trackNameTextView.post {
+            if (trackNameTextView.layout != null && trackNameTextView.width < trackNameTextView.paint.measureText(currentStep.mainTrack.name)) {
+                trackNameTextView.isSelected = true  // Ensures marquee effect starts
+            }
+        }
+
+        Glide.with(this)
+            .load(currentStep.mainTrack.artwork)
+            .into(trackArtworkImageView)
+
+        // Bind to MusicService to handle playback
+        val serviceIntent = Intent(this, MusicService::class.java)
+        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
 
         playButton.setOnClickListener {
             if (isPlaying) {
                 playButton.setImageResource(R.drawable.play_button)
-                exoPlayer.pause()
+                musicService?.pauseTrack()
             } else {
                 playButton.setImageResource(R.drawable.pause_button)
-                exoPlayer.play()
+                musicService?.playTrack(currentStep.mainTrack)
             }
             isPlaying = !isPlaying
         }
+
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    exoPlayer.seekTo(progress.toLong())
+                    musicService?.seekTo(progress)
                 }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-
-        exoPlayer.addListener(object : Player.Listener {
-            override fun onPlaybackStateChanged(state: Int) {
-                if (state == ExoPlayer.STATE_READY) {
-                    seekBar.max = exoPlayer.duration.toInt()
-                    updateSeekBar()
-                } else if (state == ExoPlayer.STATE_ENDED) {
-                    //launch new truc
-                }
-            }
-        })
     }
 
-    private fun playTrack(track: Track) {
-        trackNameTextView.text = track.name
-        val trackEntity = TrackEntity(
-            id = track.id ?: 0, // Ensure id is not null
-            name = track.name,
-            artist = track.artist ?: "Unknown",
-            audiusId= track.audiusId,
-            source = track.source ?: "AUDIUS",
-            duration = track.duration,
-            isSubTrack = track.isSubTrack,
-            stepId = track.step,
-            isStreamable = track.isStreamble,
-            artwork = track.artwork
-        )
-        TrackSingleton.setCurrentTrack(trackEntity)
-        Log.d("PlayerActivity", "Playing track: ${TrackSingleton.getCurrentTrack()}")
-        fetchAudioStream(track.audiusId, track.source ?: "AUDIUS")
-    }
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicBinder
+            musicService = binder.getService()
+            serviceBound = true
 
-    private fun fetchAudioStream(videoId: String, source: String) {
-        if (source == Source.AUDIUS.toString()) {
-            lifecycleScope.launch {
-                try {
-                    val track = AudiusService.api.getTrack(videoId)
-                    val audioUrl = AudiusService.getStreamUrl(track.data.id)
-                    playAudio(audioUrl)
-                } catch (e: Exception) {
-                    showToast("Failed to fetch audio stream from Audius, error: $e")
-                }
-            }
-        } else {
-            showToast("Unsupported source: $source")
+            // Set initial state
+            musicService?.setTrack(currentStep.mainTrack)
+            musicService?.setSeekBar(seekBar)
+
+            // Start playing the first track
+            musicService?.playTrack(currentStep.mainTrack)
         }
-    }
 
-    private fun playAudio(audioUrl: String) {
-        val intent = Intent(this, MusicService::class.java).apply {
-            putExtra("AUDIO_URL", audioUrl)
+        override fun onServiceDisconnected(name: ComponentName?) {
+            musicService = null
+            serviceBound = false
         }
-        startService(intent)
-    }
-
-
-    private fun updateSeekBar() {
-        handler.postDelayed({
-            seekBar.progress = exoPlayer.currentPosition.toInt()
-            if (exoPlayer.isPlaying) {
-                updateSeekBar()
-            }
-        }, 1000)
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        exoPlayer.release()
+        if (serviceBound) {
+            unbindService(serviceConnection)
+            serviceBound = false
+        }
     }
 }
+

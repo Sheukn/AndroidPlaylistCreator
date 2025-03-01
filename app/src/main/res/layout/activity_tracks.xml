@@ -110,7 +110,7 @@
 
         <TextView
             android:id="@+id/audioTitleTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:fontFamily="@font/madimi_regular"
@@ -120,6 +120,13 @@
             app:layout_constraintBottom_toTopOf="@+id/audioArtistTextView"
             app:layout_constraintLeft_toRightOf="@id/audioImageView"
             app:layout_constraintTop_toTopOf="@id/audioImageView"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:freezesText="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
 
             />
 
