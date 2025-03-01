@@ -7,8 +7,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.widget.SeekBar
-import androidx.core.app.NotificationCompat
-import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.entities.TrackEntity
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.models.TrackSingleton
