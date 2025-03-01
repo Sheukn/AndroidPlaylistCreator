@@ -9,7 +9,7 @@ import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.relations.StepWithTracks
 import com.example.androidplayistcreator.views.viewholders.StepViewHolder
 
-class StepsRvAdapter(private var steps: List<StepWithTracks>) : RecyclerView.Adapter<StepViewHolder>() {
+class StepCreatorRvAdapter (private var steps: List<StepWithTracks>) : RecyclerView.Adapter<StepViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_step, parent, false)

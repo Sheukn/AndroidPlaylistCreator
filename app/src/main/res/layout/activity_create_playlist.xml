@@ -20,70 +20,72 @@
 
 
     <LinearLayout
+        android:id="@+id/playlistCreateLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/playlistCreateLinearLayout"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/applicationNameTextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="15dp">
+        app:layout_constraintTop_toBottomOf="@id/applicationNameTextView">
+
         <TextView
+            android:id="@+id/formPlaylistNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/formPlaylistNameTextView"
             android:text="@string/playlist_name"
             android:textColor="@color/somewhatBeige"
             android:textSize="20sp" />
 
         <EditText
+            android:id="@+id/playlistNameEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playlistNameEditText"
-            android:hint="@string/enter_playlist_name"
-            android:background="@color/white"/>
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            android:hint="@string/enter_playlist_name" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/playlistCreateRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/playlistCreateLinearLayout"
+        app:layout_constraintHeight_percent="0.54"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintTop_toBottomOf="@id/playlistCreateLinearLayout" />
 
     <ImageView
-        android:layout_marginTop="15dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
         android:id="@+id/addTrackButton"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="15dp"
         android:src="@drawable/add_button"
-        app:layout_constraintTop_toBottomOf="@id/playlistCreateRecyclerView"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playlistCreateRecyclerView" />
 
     <Button
         android:id="@+id/playlistCreateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/orange"
         android:text="@string/create_playlist"
-        app:layout_constraintTop_toBottomOf="@id/addTrackButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:backgroundTint="@color/orange"/>
+        app:layout_constraintTop_toBottomOf="@id/addTrackButton" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:background="@color/somewhatBeige"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        >
+        app:layout_constraintRight_toRightOf="parent">
 
         <ImageView
             android:id="@+id/audioImageView"
@@ -101,19 +103,19 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:fontFamily="@font/madimi_regular"
+            android:freezesText="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
             android:text="Title"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/audioArtistTextView"
             app:layout_constraintLeft_toRightOf="@id/audioImageView"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:freezesText="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
             app:layout_constraintTop_toTopOf="@id/audioImageView" />
 
         <TextView

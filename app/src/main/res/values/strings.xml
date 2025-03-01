@@ -3,6 +3,7 @@
     <string name="playlist_name">Playlist Name :</string>
     <string name="enter_playlist_name">Enter Playlist Name</string>
     <string name="create_playlist">Create Playlist</string>
+    <string name="add_track"><![CDATA[<u>Add Track</u>]]></string>
     <string-array name="source_array">
         <item>Audius</item>
         <item>YouTube</item>
