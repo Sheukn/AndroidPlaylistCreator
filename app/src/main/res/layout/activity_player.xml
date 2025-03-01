@@ -113,4 +113,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/seekBar" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.26"
+        android:layout_marginBottom="10dp"
+        android:background="@color/somewhatBeige"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginHorizontal="10dp"
+        >
+
+<!--        <TextView-->
+<!--            android:id="@+id/subTrackTextView"-->
+<!--            android:layout_width="150dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@color/orange"-->
+<!--            android:ellipsize="marquee"-->
+<!--            android:focusable="true"-->
+<!--            android:focusableInTouchMode="true"-->
+<!--            android:fontFamily="@font/madimi_regular"-->
+<!--            android:freezesText="true"-->
+<!--            android:marqueeRepeatLimit="marquee_forever"-->
+<!--            android:scrollHorizontally="true"-->
+<!--            android:singleLine="true"-->
+<!--            android:text="Title - artist"-->
+<!--            android:textColor="@color/somewhatBeige"-->
+<!--            android:textSize="13sp"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

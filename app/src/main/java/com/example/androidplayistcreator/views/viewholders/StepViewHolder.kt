@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.relations.StepWithTracks
 import com.example.androidplayistcreator.views.recycler_view_adapters.SubTrackListRvAdapter
@@ -30,6 +31,9 @@ class StepViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 trackTextView.isSelected = true  // Ensures marquee effect starts
             }
         }
+
+        Glide.with(itemView.context).load(mainTrack?.artwork).into(trackImageView)
+
         if (subTracks.isNotEmpty()) {
             subTrackCardView.visibility = View.VISIBLE // Show sub-track card
             val adapter = SubTrackListRvAdapter(subTracks)

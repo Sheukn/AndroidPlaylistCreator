@@ -33,6 +33,12 @@ interface PlaylistDao {
     @Insert
     suspend fun insertTracks(tracks: List<TrackEntity>): List<Long>
 
+    @Insert
+    suspend fun insertTrackInStep (track: TrackEntity, stepId: Int): Long
+
+    @Insert
+    suspend fun insertStepInPlaylist (step: StepEntity, playlistId: Int): Long
+
     @Query("SELECT * FROM PlaylistEntity")
     suspend fun getAllPlaylists(): List<PlaylistEntity>
 

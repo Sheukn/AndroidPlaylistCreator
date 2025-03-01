@@ -67,6 +67,8 @@ class SearchActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, Intent().apply {
                 putExtra("SELECTED_TRACK", track.name)
             })
+            // TODO INSERT INTO STEP
+            finish()
         }
 
         recyclerView.adapter = adapter
