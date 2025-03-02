@@ -3,6 +3,7 @@ package com.example.androidplayistcreator.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ class PlaylistActivity : AppCompatActivity() {
     private lateinit var trackSingleton: TrackSingleton
     private lateinit var bottomBarController: BottomBarController
     private lateinit var bottomBar: ConstraintLayout
+    private lateinit var deleteButton : Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +42,7 @@ class PlaylistActivity : AppCompatActivity() {
         userTextView = findViewById(R.id.userTextView)
         createPlaylistButton = findViewById(R.id.createPlaylistButton)
         bottomBar = findViewById(R.id.bottomBar)
+        deleteButton = findViewById(R.id.deleteAllButton)
 
         createPlaylistButton.setOnClickListener {
             val intent = Intent(this, PlaylistCreatorActivity::class.java)
@@ -47,6 +50,16 @@ class PlaylistActivity : AppCompatActivity() {
         }
         trackSingleton = TrackSingleton
         setupBottomBar()
+
+        deleteButton.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val migrator = DatabaseMigrator(this@PlaylistActivity)
+                migrator.clearDatabase()
+                withContext(Dispatchers.Main) {
+                    loadPlaylists()
+                }
+            }
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
 //            val migrator = DatabaseMigrator(this@PlaylistActivity)
