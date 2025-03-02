@@ -65,14 +65,22 @@ class SearchActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SearchResultRvAdapter(mutableListOf()) { track ->
             Log.d("SearchActivity", "User selected: ${track.name} by ${track.artist}")
+
             val isMainTrack = intent.getBooleanExtra("isMainTrack", false)
             val currentStepPosition = PlaylistSingleton.currentStepPosition
 
+            if (trackExistsInPlaylist(track, isMainTrack)) {
+                showAlert("Track already exists", "This track is already in the playlist")
+                return@SearchResultRvAdapter
+            }
+
             if (currentStepPosition != -1) {
-                if (isMainTrack) {
-                    PlaylistSingleton.playlist.steps[currentStepPosition].mainTrack = track
-                } else {
-                    PlaylistSingleton.playlist.steps[currentStepPosition].subTracks.add(track)
+                PlaylistSingleton.playlist.steps[currentStepPosition].also { step ->
+                    if (isMainTrack) {
+                        step.mainTrack = track
+                    } else {
+                        step.subTracks.add(track)
+                    }
                 }
             }
 
@@ -143,6 +151,16 @@ class SearchActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton(android.R.string.ok, null)
             .show()
+    }
+
+    private fun trackExistsInPlaylist(track: Track, isMainTrack: Boolean): Boolean {
+        return if (isMainTrack) {
+            PlaylistSingleton.playlist.steps.any { it.mainTrack.audiusId == track.audiusId }
+        } else {
+            PlaylistSingleton.playlist.steps.any { step ->
+                step.subTracks.any { it.audiusId == track.audiusId }
+            }
+        }
     }
 }
 
