@@ -58,7 +58,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="20dp"
         android:background="?attr/colorOnPrimary"
-        android:textColor="?attr/colorPrimary"/>
+        android:textColor="?attr/colorPrimary"
+        android:textOn="Night"
+        android:textOff="Day"
+        />
 
     <ImageView
         android:id="@+id/createPlaylistButton"
