@@ -103,45 +103,40 @@
         app:layout_constraintTop_toBottomOf="@id/TrackNameTextView" />
 
     <!-- Play/Pause Button -->
+
+    <ImageView
+        android:id="@+id/previousButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:contentDescription="Previous Track"
+        android:rotation="180"
+        android:src="@drawable/next_previous_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        android:layout_marginStart="20dp"
+        />
+
+    <!-- Bouton Lecture/Pause -->
     <ImageView
         android:id="@+id/playButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="20dp"
+        android:contentDescription="Play/Pause"
         android:src="@drawable/play_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/nextButton"
+        app:layout_constraintStart_toEndOf="@id/previousButton"
         app:layout_constraintTop_toBottomOf="@id/seekBar" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.26"
-        android:layout_marginBottom="10dp"
-        android:background="@color/somewhatBeige"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginHorizontal="10dp"
-        >
+    <!-- Bouton Suivant -->
+    <ImageView
+        android:id="@+id/nextButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:contentDescription="Next Track"
+        android:src="@drawable/next_previous_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        android:layout_marginEnd="20dp"/>
 
-<!--        <TextView-->
-<!--            android:id="@+id/subTrackTextView"-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@color/orange"-->
-<!--            android:ellipsize="marquee"-->
-<!--            android:focusable="true"-->
-<!--            android:focusableInTouchMode="true"-->
-<!--            android:fontFamily="@font/madimi_regular"-->
-<!--            android:freezesText="true"-->
-<!--            android:marqueeRepeatLimit="marquee_forever"-->
-<!--            android:scrollHorizontally="true"-->
-<!--            android:singleLine="true"-->
-<!--            android:text="Title - artist"-->
-<!--            android:textColor="@color/somewhatBeige"-->
-<!--            android:textSize="13sp"-->
-<!--            app:layout_constraintLeft_toLeftOf="parent" />-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

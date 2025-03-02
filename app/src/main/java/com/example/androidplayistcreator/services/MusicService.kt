@@ -1,12 +1,16 @@
 package com.example.androidplayistcreator.services
 
 import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.widget.SeekBar
+import androidx.core.app.NotificationCompat
+import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.entities.TrackEntity
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.models.singletons.TrackSingleton
@@ -21,11 +25,47 @@ class MusicService : Service() {
     private lateinit var seekBar: SeekBar
     private val handler = Handler(Looper.getMainLooper())
 
+    private var onTrackCompletionListener: (() -> Unit)? = null
+
+    fun setOnTrackCompletionListener(listener: () -> Unit) {
+        this.onTrackCompletionListener = listener
+    }
+
     override fun onCreate() {
         super.onCreate()
-
-        // Initialize ExoPlayer
         exoPlayer = ExoPlayer.Builder(this).build()
+
+        // Listen for track completion
+        exoPlayer.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == Player.STATE_ENDED) {
+                    onTrackCompletionListener?.invoke() // Trigger the listener
+                }
+            }
+        })
+
+        // Start service in the foreground
+        val notification = createNotification()
+        startForeground(1, notification)
+    }
+
+    private fun createNotification(): Notification {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "music_service_channel",
+                "Music Service",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        return NotificationCompat.Builder(this, "music_service_channel")
+            .setContentTitle("Music Playing")
+            .setContentText("Your music is playing")
+            .setSmallIcon(R.drawable.ic_music_note) // Replace with your app's icon
+            .setOngoing(true) // To ensure it remains persistent
+            .build()
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -98,5 +138,7 @@ class MusicService : Service() {
         super.onDestroy()
         exoPlayer.release()
     }
+
+
 }
 
