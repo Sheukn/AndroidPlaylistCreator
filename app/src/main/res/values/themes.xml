@@ -2,13 +2,13 @@
 <resources>
     <!-- Thème principal de l'application -->
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">#D8494646</item>
         <item name="colorPrimaryVariant">@color/blue</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/somewhatBeige</item>
 
         <item name="colorSecondary">@color/orange</item>
         <item name="colorSecondaryVariant">@color/lighterOrange</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">#D8494646</item>
 
         <item name="android:statusBarColor">@color/deepBlue</item>
         <item name="android:navigationBarColor">@color/deepBlue</item>
@@ -17,14 +17,14 @@
     <!-- Variante sombre du thème -->
     <style name="Theme.MyApp.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/deepBlue</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorPrimaryVariant">#D8494646</item>
         <item name="colorOnPrimary">@color/somewhatBeige</item>
 
         <item name="colorSecondary">@color/orange</item>
         <item name="colorSecondaryVariant">@color/lighterOrange</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">#D8494646</item>
 
-        <item name="android:statusBarColor">@color/black</item>
-        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">#D8494646</item>
+        <item name="android:navigationBarColor">#D8494646</item>
     </style>
 </resources>

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.activities.TrackListActivity
 import com.example.androidplayistcreator.database.entities.PlaylistEntity
@@ -26,6 +27,10 @@ class PlaylistsRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
                 playlistTitle.isSelected = true  // This ensures the marquee effect starts
             }
         }
+
+        Glide.with(itemView.context)
+            .load("https://cataas.com/cat")
+            .into(playlistImage)
 
         itemView.setOnClickListener {
             val context = itemView.context
