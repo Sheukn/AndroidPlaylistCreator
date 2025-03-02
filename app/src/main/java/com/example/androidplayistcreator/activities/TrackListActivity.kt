@@ -43,11 +43,6 @@ class TrackListActivity : AppCompatActivity() {
         startPlaylistButton = findViewById(R.id.startPlaylistButton)
         recyclerView.adapter = adapter
         bottomBar = findViewById(R.id.bottomBar)
-
-        addTrackButton.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_ADD_TRACK)
-        }
         startPlaylistButton.setOnClickListener {
             startPlaylist()
         }
@@ -99,16 +94,5 @@ class TrackListActivity : AppCompatActivity() {
             intent.putExtra("PLAYLIST_WITH_STEPS", playlistJson)
             startActivity(intent)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_ADD_TRACK && resultCode == RESULT_OK) {
-            loadSteps()
-        }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_ADD_TRACK = 1
     }
 }

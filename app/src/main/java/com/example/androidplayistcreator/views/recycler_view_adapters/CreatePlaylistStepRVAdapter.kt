@@ -1,5 +1,6 @@
 package com.example.androidplayistcreator.views.recycler_view_adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ class CreatePlaylistStepRVAdapter(private var steps: List<Step>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: StepCreatorViewHolder, position: Int) {
-        holder.bind(steps[position])
+        holder.bind(steps[position], position) // Pass the position
     }
 
     override fun getItemCount(): Int {
@@ -25,6 +26,7 @@ class CreatePlaylistStepRVAdapter(private var steps: List<Step>) : RecyclerView.
     }
 
     // Update the list and notify the adapter
+    @SuppressLint("NotifyDataSetChanged")
     fun updateSteps(newSteps: List<Step>) {
         steps = newSteps
         notifyDataSetChanged()

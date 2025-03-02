@@ -1,6 +1,9 @@
 package com.example.androidplayistcreator.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -15,6 +18,7 @@ import com.example.androidplayistcreator.database.entities.PlaylistEntity
 import com.example.androidplayistcreator.database.entities.StepEntity
 import com.example.androidplayistcreator.models.Step
 import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.models.singletons.PlaylistSingleton
 import com.example.androidplayistcreator.models.singletons.TrackSingleton
 import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.CreatePlaylistStepRVAdapter
@@ -30,8 +34,10 @@ class PlaylistCreatorActivity : AppCompatActivity() {
     private lateinit var createPlaylistButton: Button
     private lateinit var bottomBarController: BottomBarController
     private lateinit var bottomBar: ConstraintLayout
+    private lateinit var playlistCreateRecyclerView: RecyclerView
 
-    private val stepsList = mutableListOf<Step>()
+    private val stepsList: MutableList<Step>
+        get() = PlaylistSingleton.playlist.steps
 
     private lateinit var adapter: CreatePlaylistStepRVAdapter
 
@@ -39,55 +45,43 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_playlist)
 
-        // Initialize Room database and DAO
         playlistDao = AppDatabase.getInstance(this).playlistDao()
-
-        playlistNameEditText = findViewById(R.id.playlistNameEditText)
+        playlistCreateRecyclerView = findViewById(R.id.playlistCreateRecyclerView)
         addStepButton = findViewById(R.id.addStepButton)
         createPlaylistButton = findViewById(R.id.playlistCreateButton)
         bottomBar = findViewById(R.id.bottomBar)
 
-        // Set up RecyclerView and adapter
-        val recyclerView: RecyclerView = findViewById(R.id.playlistCreateRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        playlistCreateRecyclerView.layoutManager = LinearLayoutManager(this)
         adapter = CreatePlaylistStepRVAdapter(stepsList)
-        recyclerView.adapter = adapter
+        playlistCreateRecyclerView.adapter = adapter
 
-        // Set up addTrackButton click listener
         addStepButton.setOnClickListener {
             addStep()
         }
 
-        // Set up createPlaylistButton click listener
         createPlaylistButton.setOnClickListener {
-            val playlistName = playlistNameEditText.text.toString()
-            if (playlistName.isNotEmpty()) {
-                val newPlaylist = PlaylistEntity(id = 0, name = playlistName, imageUrl = null)
+            // Log current data in the singleton
+            Log.d("PlaylistCreatorActivity", "Playlist: ${PlaylistSingleton.playlist}")
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    val playlistId = playlistDao.insertPlaylist(newPlaylist).toInt()
-
-                    val steps = listOf(
-                        StepEntity(step = 1, playlistId = playlistId),
-                        StepEntity(step = 2, playlistId = playlistId)
-                    )
-
-                    playlistDao.insertSteps(steps)
-
-                    withContext(Dispatchers.Main) {
-                        finish()
-                    }
-                }
-            }
         }
 
         setupBottomBar()
     }
 
-    // Function to add a new step to the list
     private fun addStep() {
-        stepsList.add(Step(mainTrack = Track(name = "Track", artist = "Artist", audiusId = "0", duration = "0", isStreamable = false, step = 0, isSubTrack = false, source = null, artwork = null), subTracks = mutableListOf()))
+        stepsList.add(
+            Step(
+                mainTrack = Track(name = "Track", artist = "Artist", audiusId = "0", duration = "0", isStreamable = false, step = 0, isSubTrack = false, source = null, artwork = null),
+                subTracks = mutableListOf() // Initialize as MutableList
+            )
+        )
         adapter.notifyItemInserted(stepsList.size - 1)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Refresh the adapter when the activity resumes
+        adapter.notifyDataSetChanged()
     }
 
     private fun setupBottomBar() {
@@ -98,5 +92,7 @@ class PlaylistCreatorActivity : AppCompatActivity() {
             bottomBar.visibility = ConstraintLayout.GONE
         }
     }
+
+
 }
 

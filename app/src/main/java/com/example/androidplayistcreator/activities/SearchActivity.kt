@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.models.singletons.PlaylistSingleton
 import com.example.androidplayistcreator.models.singletons.TrackSingleton
 import com.example.androidplayistcreator.services.AudiusService
 import com.example.androidplayistcreator.views.BottomBarController
@@ -64,15 +65,23 @@ class SearchActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SearchResultRvAdapter(mutableListOf()) { track ->
             Log.d("SearchActivity", "User selected: ${track.name} by ${track.artist}")
-            setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra("SELECTED_TRACK", track)
-            })
+            val isMainTrack = intent.getBooleanExtra("isMainTrack", false)
+            val currentStepPosition = PlaylistSingleton.currentStepPosition
+
+            if (currentStepPosition != -1) {
+                if (isMainTrack) {
+                    PlaylistSingleton.playlist.steps[currentStepPosition].mainTrack = track
+                } else {
+                    PlaylistSingleton.playlist.steps[currentStepPosition].subTracks.add(track)
+                }
+            }
+
+            setResult(Activity.RESULT_OK)
             finish()
         }
 
         recyclerView.adapter = adapter
     }
-
     private fun setupListeners() {
         searchButton.setOnClickListener {
             val query = searchEditText.text.toString()
@@ -136,3 +145,4 @@ class SearchActivity : AppCompatActivity() {
             .show()
     }
 }
+
