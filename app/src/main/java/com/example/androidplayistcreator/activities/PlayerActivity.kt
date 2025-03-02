@@ -8,30 +8,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
-import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.TrackEntity
 import com.example.androidplayistcreator.database.relations.PlaylistWithSteps
-import com.example.androidplayistcreator.models.Source
 import com.example.androidplayistcreator.models.Step
-import com.example.androidplayistcreator.models.Track
-import com.example.androidplayistcreator.models.TrackSingleton
-import com.example.androidplayistcreator.services.AudiusService
 import com.example.androidplayistcreator.services.MusicService
-import com.example.androidplayistcreator.services.YTDLPApiService
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ui.PlayerView
 import com.google.gson.Gson
-import kotlinx.coroutines.launch
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var playButton: ImageView

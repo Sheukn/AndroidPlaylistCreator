@@ -1,4 +1,4 @@
-package com.example.androidplayistcreator.models
+package com.example.androidplayistcreator.models.singletons
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -27,7 +27,7 @@ class StepsRvAdapter(private var steps: List<StepWithTracks>) : RecyclerView.Ada
         steps = newSteps
         for (step in steps) {
             for (track in step.tracks) {
-                Log.d("StepsRvAdapter", "Track: ${track.name}")
+                Log.d("StepsRvAdapter", "com.example.androidplayistcreator.models.Track: ${track.name}")
             }
         }
         notifyDataSetChanged()

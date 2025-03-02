@@ -32,7 +32,7 @@ class SearchResultRvAdapter(
         val searchResult = searchResults[position]
         holder.bind(searchResult)
         holder.itemView.setOnClickListener {
-            Log.d("SearchResultRvAdapter", "com.example.androidplayistcreator.models.Track selected: $searchResult") // Log des détails
+            Log.d("SearchResultRvAdapter", "com.example.androidplayistcreator.models.com.example.androidplayistcreator.models.Track selected: $searchResult") // Log des détails
             onTrackSelected(searchResult)
         }
     }

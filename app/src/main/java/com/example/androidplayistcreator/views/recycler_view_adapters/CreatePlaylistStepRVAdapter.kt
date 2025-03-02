@@ -4,23 +4,29 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
+import com.example.androidplayistcreator.models.Step
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.views.viewholders.CreatePlaylistStepRvViewHolder
+import com.example.androidplayistcreator.views.viewholders.StepCreatorViewHolder
 
-class CreatePlaylistStepRVAdapter (val subTracks : List<Track>):
-    RecyclerView.Adapter<CreatePlaylistStepRvViewHolder>() {
+class CreatePlaylistStepRVAdapter(private var steps: List<Step>) : RecyclerView.Adapter<StepCreatorViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreatePlaylistStepRvViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepCreatorViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_create_playlist_step, parent, false)
-        return CreatePlaylistStepRvViewHolder(view)
+        return StepCreatorViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CreatePlaylistStepRvViewHolder, position: Int) {
-        val track = subTracks[position]
-        holder.bind(track)
+    override fun onBindViewHolder(holder: StepCreatorViewHolder, position: Int) {
+        holder.bind(steps[position])
     }
 
     override fun getItemCount(): Int {
-        return subTracks.size
+        return steps.size
+    }
+
+    // Update the list and notify the adapter
+    fun updateSteps(newSteps: List<Step>) {
+        steps = newSteps
+        notifyDataSetChanged()
     }
 }

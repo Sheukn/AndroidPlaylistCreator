@@ -13,7 +13,9 @@ import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.PlaylistEntity
 import com.example.androidplayistcreator.database.entities.StepEntity
-import com.example.androidplayistcreator.models.TrackSingleton
+import com.example.androidplayistcreator.models.Step
+import com.example.androidplayistcreator.models.Track
+import com.example.androidplayistcreator.models.singletons.TrackSingleton
 import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.CreatePlaylistStepRVAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -24,10 +26,14 @@ import kotlinx.coroutines.withContext
 class PlaylistCreatorActivity : AppCompatActivity() {
     private lateinit var playlistDao: PlaylistDao
     private lateinit var playlistNameEditText: EditText
-    private lateinit var addTrackButton: ImageView
+    private lateinit var addStepButton: ImageView
     private lateinit var createPlaylistButton: Button
     private lateinit var bottomBarController: BottomBarController
     private lateinit var bottomBar: ConstraintLayout
+
+    private val stepsList = mutableListOf<Step>()
+
+    private lateinit var adapter: CreatePlaylistStepRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +43,22 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         playlistDao = AppDatabase.getInstance(this).playlistDao()
 
         playlistNameEditText = findViewById(R.id.playlistNameEditText)
-        addTrackButton = findViewById(R.id.addTrackButton)
+        addStepButton = findViewById(R.id.addStepButton)
         createPlaylistButton = findViewById(R.id.playlistCreateButton)
         bottomBar = findViewById(R.id.bottomBar)
 
+        // Set up RecyclerView and adapter
+        val recyclerView: RecyclerView = findViewById(R.id.playlistCreateRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = CreatePlaylistStepRVAdapter(stepsList)
+        recyclerView.adapter = adapter
+
+        // Set up addTrackButton click listener
+        addStepButton.setOnClickListener {
+            addStep()
+        }
+
+        // Set up createPlaylistButton click listener
         createPlaylistButton.setOnClickListener {
             val playlistName = playlistNameEditText.text.toString()
             if (playlistName.isNotEmpty()) {
@@ -62,16 +80,15 @@ class PlaylistCreatorActivity : AppCompatActivity() {
                 }
             }
         }
+
         setupBottomBar()
-        updateRecyclerView()
     }
 
-    private fun updateRecyclerView() {
-        val recyclerView: RecyclerView = findViewById(R.id.playlistCreateRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = CreatePlaylistStepRVAdapter(emptyList())
+    // Function to add a new step to the list
+    private fun addStep() {
+        stepsList.add(Step(mainTrack = Track(name = "Track", artist = "Artist", audiusId = "0", duration = "0", isStreamable = false, step = 0, isSubTrack = false, source = null, artwork = null), subTracks = mutableListOf()))
+        adapter.notifyItemInserted(stepsList.size - 1)
     }
-
 
     private fun setupBottomBar() {
         if (TrackSingleton.getCurrentTrackId() != 0) {
@@ -81,5 +98,5 @@ class PlaylistCreatorActivity : AppCompatActivity() {
             bottomBar.visibility = ConstraintLayout.GONE
         }
     }
-
 }
+

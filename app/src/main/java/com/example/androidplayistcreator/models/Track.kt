@@ -1,5 +1,7 @@
 package com.example.androidplayistcreator.models
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.example.androidplayistcreator.database.entities.TrackEntity
 
 data class Track(
@@ -13,8 +15,47 @@ data class Track(
     val isSubTrack: Boolean,
     val source: String?,
     val artwork: String?
-) {
-    companion object {
+) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readString(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readByte() != 0.toByte(),
+        parcel.readInt(),
+        parcel.readByte() != 0.toByte(),
+        parcel.readString(),
+        parcel.readString()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(id)
+        parcel.writeString(artist)
+        parcel.writeString(name)
+        parcel.writeString(audiusId)
+        parcel.writeString(duration)
+        parcel.writeByte(if (isStreamable) 1 else 0)
+        parcel.writeInt(step)
+        parcel.writeByte(if (isSubTrack) 1 else 0)
+        parcel.writeString(source)
+        parcel.writeString(artwork)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Track> {
+        override fun createFromParcel(parcel: Parcel): Track {
+            return Track(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Track?> {
+            return arrayOfNulls(size)
+        }
+
         fun fromString(trackString: String): Track {
             val parts = trackString.split("|")
             return Track(
@@ -48,7 +89,7 @@ data class Track(
     }
 
     override fun toString(): String {
-        return listOf(artist, name, step, audiusId, duration, isSubTrack , source, isStreamable, artwork)
+        return listOf(artist, name, step, audiusId, duration, isSubTrack, source, isStreamable, artwork)
             .joinToString("|") { it.toString() }
     }
 }

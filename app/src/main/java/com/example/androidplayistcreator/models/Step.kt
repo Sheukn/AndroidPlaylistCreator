@@ -3,7 +3,7 @@ package com.example.androidplayistcreator.models
 import com.example.androidplayistcreator.database.relations.StepWithTracks
 
 data class Step(
-    val step: Int,
+    val step: Int = 0,
     val mainTrack: Track,
     val subTracks: List<Track>
 ) {

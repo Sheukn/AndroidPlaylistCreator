@@ -14,7 +14,7 @@ import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.DatabaseMigrator
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.PlaylistEntity
-import com.example.androidplayistcreator.models.TrackSingleton
+import com.example.androidplayistcreator.models.singletons.TrackSingleton
 import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.PlaylistsRvAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -93,6 +93,6 @@ class PlaylistActivity : AppCompatActivity() {
     private fun updateRecyclerView(playlists: List<PlaylistEntity>) {
         val recyclerView: RecyclerView = findViewById(R.id.playlist_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = PlaylistsRvAdapter(playlists)  // No need to pass com.example.androidplayistcreator.models.TrackSingleton
+        recyclerView.adapter = PlaylistsRvAdapter(playlists)  // No need to pass com.example.androidplayistcreator.models.singletons.TrackSingleton
     }
 }

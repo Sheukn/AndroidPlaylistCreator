@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@id/exoPlayerView"
         app:layout_constraintWidth_percent="0.8" />
 
-    <!-- Track Name TextView -->
+    <!-- com.example.androidplayistcreator.models.Track Name TextView -->
     <TextView
         android:id="@+id/TrackNameTextView"
         android:layout_width="0dp"

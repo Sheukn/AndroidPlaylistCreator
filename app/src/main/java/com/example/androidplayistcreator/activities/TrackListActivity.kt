@@ -3,7 +3,6 @@ package com.example.androidplayistcreator.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
-import com.example.androidplayistcreator.models.TrackSingleton
+import com.example.androidplayistcreator.models.singletons.TrackSingleton
 import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.StepsRvAdapter
 import com.google.gson.Gson

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.activities.TrackListActivity
 import com.example.androidplayistcreator.database.entities.PlaylistEntity
-import com.example.androidplayistcreator.models.TrackSingleton
+import com.example.androidplayistcreator.models.singletons.TrackSingleton
 
 class PlaylistsRvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val playlistImage: ImageView = itemView.findViewById(R.id.playlist_id)

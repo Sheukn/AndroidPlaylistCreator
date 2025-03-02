@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.entities.TrackEntity
+import com.example.androidplayistcreator.models.Track
 
 class SubTrackRvViewHolder (ItemView: View) : RecyclerView.ViewHolder(ItemView) {
     val dotView: View = itemView.findViewById(R.id.dotView)
@@ -15,7 +16,22 @@ class SubTrackRvViewHolder (ItemView: View) : RecyclerView.ViewHolder(ItemView) 
 
         trackTitle.post {
             if (trackTitle.layout != null && trackTitle.width < trackTitle.paint.measureText(track.name)) {
-                trackTitle.isSelected = true  // Ensures marquee effect starts
+                trackTitle.isSelected = true
+            }
+        }
+        val random = randomMethod()
+        when(random){
+            1 -> dotView.setBackgroundResource(R.drawable.blue_circle_dot)
+            2 -> dotView.setBackgroundResource(R.drawable.green_circle_dot)
+            3 -> dotView.setBackgroundResource(R.drawable.red_circle_dot)
+        }
+    }
+
+    fun bind(track: Track){
+        trackTitle.text = track.name
+        trackTitle.post {
+            if (trackTitle.layout != null && trackTitle.width < trackTitle.paint.measureText(track.name)) {
+                trackTitle.isSelected = true
             }
         }
         val random = randomMethod()

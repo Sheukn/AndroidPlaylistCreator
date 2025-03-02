@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.models.Track
-import com.example.androidplayistcreator.models.TrackSingleton
+import com.example.androidplayistcreator.models.singletons.TrackSingleton
 import com.example.androidplayistcreator.services.AudiusService
 import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.SearchResultRvAdapter
@@ -65,9 +65,8 @@ class SearchActivity : AppCompatActivity() {
         adapter = SearchResultRvAdapter(mutableListOf()) { track ->
             Log.d("SearchActivity", "User selected: ${track.name} by ${track.artist}")
             setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra("SELECTED_TRACK", track.name)
+                putExtra("SELECTED_TRACK", track)
             })
-            // TODO INSERT INTO STEP
             finish()
         }
 

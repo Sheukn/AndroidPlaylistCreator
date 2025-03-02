@@ -9,7 +9,7 @@ import android.os.Looper
 import android.widget.SeekBar
 import com.example.androidplayistcreator.database.entities.TrackEntity
 import com.example.androidplayistcreator.models.Track
-import com.example.androidplayistcreator.models.TrackSingleton
+import com.example.androidplayistcreator.models.singletons.TrackSingleton
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
