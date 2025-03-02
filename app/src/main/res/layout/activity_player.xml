@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deepBlue">
+    android:background="?attr/colorPrimary">
 
     <TextView
         android:id="@+id/applicationNameTextView"
@@ -12,7 +12,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/madimi_regular"
         android:text="Application Name"
-        android:textColor="@color/somewhatBeige"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="40sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,10 +29,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/applicationNameTextView" />
 
-
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/exoPlayerView"
-
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_centerInParent="true"
@@ -55,7 +53,7 @@
         android:singleLine="true"
         android:text="Playlist Name"
         android:textAlignment="center"
-        android:textColor="@color/somewhatBeige"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@id/TrackNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +61,6 @@
         app:layout_constraintTop_toBottomOf="@id/exoPlayerView"
         app:layout_constraintWidth_percent="0.8" />
 
-    <!-- com.example.androidplayistcreator.models.Track Name TextView -->
     <TextView
         android:id="@+id/TrackNameTextView"
         android:layout_width="0dp"
@@ -79,14 +76,13 @@
         android:singleLine="true"
         android:text="Track Name"
         android:textAlignment="center"
-        android:textColor="@color/somewhatBeige"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/PlaylistNameTextView"
         app:layout_constraintWidth_percent="0.8" />
 
-    <!-- SeekBar -->
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="0dp"
@@ -94,15 +90,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/lighterOrange"
-        android:progressTint="@color/somewhatBeige"
-        android:thumbTint="@color/somewhatBeige"
+        android:background="?attr/colorSecondary"
+        android:progressTint="?attr/colorOnSecondary"
+        android:thumbTint="?attr/colorOnSecondary"
         app:layout_constraintBottom_toTopOf="@id/playButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/TrackNameTextView" />
 
-    <!-- Play/Pause Button -->
     <ImageView
         android:id="@+id/playButton"
         android:layout_width="100dp"
@@ -116,32 +111,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:background="?attr/colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.26"
-        android:layout_marginBottom="10dp"
-        android:background="@color/somewhatBeige"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginHorizontal="10dp"
-        >
-
-<!--        <TextView-->
-<!--            android:id="@+id/subTrackTextView"-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@color/orange"-->
-<!--            android:ellipsize="marquee"-->
-<!--            android:focusable="true"-->
-<!--            android:focusableInTouchMode="true"-->
-<!--            android:fontFamily="@font/madimi_regular"-->
-<!--            android:freezesText="true"-->
-<!--            android:marqueeRepeatLimit="marquee_forever"-->
-<!--            android:scrollHorizontally="true"-->
-<!--            android:singleLine="true"-->
-<!--            android:text="Title - artist"-->
-<!--            android:textColor="@color/somewhatBeige"-->
-<!--            android:textSize="13sp"-->
-<!--            app:layout_constraintLeft_toLeftOf="parent" />-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginHorizontal="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

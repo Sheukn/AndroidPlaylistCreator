@@ -18,7 +18,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/orange">
+            android:background="?attr/colorSecondary"> <!-- Utilisation de la couleur secondaire du thème -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/madimi_regular"
                     android:text="Track Name"
-                    android:textColor="@color/somewhatBeige"
+                    android:textColor="?attr/colorOnSecondary"
                     android:textSize="20sp"
                     android:ellipsize="marquee"
                     android:focusable="true"
@@ -70,7 +70,7 @@
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/madimi_regular"
                     android:text="Duration : 00:00"
-                    android:textColor="@color/somewhatBeige"
+                    android:textColor="?attr/colorOnSecondary"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="@id/trackCardView"
                     app:layout_constraintLeft_toRightOf="@id/trackCardView" />
@@ -89,13 +89,12 @@
         android:layout_gravity="end"
         app:layout_constraintTop_toBottomOf="@id/mainTrackCardView"
         app:layout_constraintRight_toRightOf="@id/mainTrackCardView"
-        app:layout_constraintHeight_max="150dp"
-        >
+        app:layout_constraintHeight_max="150dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lighterOrange">
+            android:background="?attr/colorPrimaryVariant">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/secondaryTrackListRecyclerView"
@@ -114,10 +113,9 @@
         app:layout_constraintRight_toRightOf="@id/subTrackListCardView"
         android:text="@string/add_track"
         android:textStyle="italic"
-        android:textColor="@color/somewhatBeige"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="18sp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

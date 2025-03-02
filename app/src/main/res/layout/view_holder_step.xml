@@ -18,7 +18,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/orange">
+            android:background="?attr/colorSecondary">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/madimi_regular"
                     android:text="Track Name"
-                    android:textColor="@color/somewhatBeige"
+                    android:textColor="?attr/colorOnSecondary"
                     android:textSize="20sp"
                     android:ellipsize="marquee"
                     android:focusable="true"
@@ -70,7 +70,7 @@
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/madimi_regular"
                     android:text="Duration : 00:00"
-                    android:textColor="@color/somewhatBeige"
+                    android:textColor="?attr/colorOnSecondary"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="@id/trackCardView"
                     app:layout_constraintLeft_toRightOf="@id/trackCardView" />
@@ -93,7 +93,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lighterOrange">
+            android:background="?attr/colorSecondaryVariant">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/secondaryTrackListRecyclerView"

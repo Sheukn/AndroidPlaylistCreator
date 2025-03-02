@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +38,7 @@ class PlaylistCreatorActivity : AppCompatActivity() {
     private lateinit var bottomBarController: BottomBarController
     private lateinit var bottomBar: ConstraintLayout
     private lateinit var playlistCreateRecyclerView: RecyclerView
+    private lateinit var sharedPreferences: android.content.SharedPreferences
 
     private val stepsList: MutableList<Step>
         get() = PlaylistSingleton.playlist.steps
@@ -45,6 +47,14 @@ class PlaylistCreatorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Set the theme
+        sharedPreferences = getSharedPreferences("theme_prefs", MODE_PRIVATE)
+        val isDarkTheme = sharedPreferences.getBoolean("isDarkTheme", false)
+        if (isDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
         setContentView(R.layout.activity_create_playlist)
 
         playlistDao = AppDatabase.getInstance(this).playlistDao()

@@ -1,11 +1,14 @@
 package com.example.androidplayistcreator.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,10 +32,20 @@ class PlaylistActivity : AppCompatActivity() {
     private lateinit var trackSingleton: TrackSingleton
     private lateinit var bottomBarController: BottomBarController
     private lateinit var bottomBar: ConstraintLayout
-
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var themeChangeButton: ToggleButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Set the theme
+        sharedPreferences = getSharedPreferences("theme_prefs", MODE_PRIVATE)
+        val isDarkTheme = sharedPreferences.getBoolean("isDarkTheme", false)
+        if (isDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         setContentView(R.layout.activity_playlist)
 
         // Initialize Room database and DAO
@@ -47,6 +60,20 @@ class PlaylistActivity : AppCompatActivity() {
         }
         trackSingleton = TrackSingleton
         setupBottomBar()
+
+        val themeChangeButton: ToggleButton = findViewById(R.id.themeChangeButton)
+        themeChangeButton.setOnClickListener {
+            val editor = sharedPreferences.edit()
+            if (isDarkTheme) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                editor.putBoolean("isDarkTheme", false)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                editor.putBoolean("isDarkTheme", true)
+            }
+            editor.apply()
+            recreate() // Recreate the activity to apply the new theme
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
 //            val migrator = DatabaseMigrator(this@PlaylistActivity)

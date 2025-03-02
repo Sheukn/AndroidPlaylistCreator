@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deepBlue">
+    android:background="?attr/colorPrimary">
 
     <TextView
         android:id="@+id/applicationNameTextView"
@@ -12,12 +12,11 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/madimi_regular"
         android:text="Application Name"
-        android:textColor="@color/somewhatBeige"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="40sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <LinearLayout
         android:id="@+id/playlistCreateLinearLayout"
@@ -34,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/playlist_name"
-            android:textColor="@color/somewhatBeige"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="20sp" />
 
         <EditText
@@ -42,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:background="@color/white"
+            android:background="?attr/colorSurface"
             android:hint="@string/enter_playlist_name" />
     </LinearLayout>
 
@@ -71,7 +70,7 @@
         android:id="@+id/playlistCreateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/orange"
+        android:backgroundTint="?attr/colorSecondary"
         android:text="@string/create_playlist"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -81,7 +80,7 @@
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:background="@color/somewhatBeige"
+        android:background="?attr/colorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -92,7 +91,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
-            android:background="@color/black"
+            android:background="?attr/colorOnSecondary"
             android:src="@drawable/audius"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -112,7 +111,7 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/audioArtistTextView"
             app:layout_constraintLeft_toRightOf="@id/audioImageView"
@@ -125,7 +124,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="@font/madimi_regular"
             android:text="Artist"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/audioImageView"
             app:layout_constraintLeft_toRightOf="@id/audioImageView"
@@ -142,6 +141,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

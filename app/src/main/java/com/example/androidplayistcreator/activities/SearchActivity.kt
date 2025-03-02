@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,9 +35,18 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var audiusCheckBox: CheckBox
     private lateinit var bottomBarController: BottomBarController
     private lateinit var bottomBar: ConstraintLayout
+    private lateinit var sharedPreferences: android.content.SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Set the theme
+        sharedPreferences = getSharedPreferences("theme_prefs", MODE_PRIVATE)
+        val isDarkTheme = sharedPreferences.getBoolean("isDarkTheme", false)
+        if (isDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
         setContentView(R.layout.activity_research)
         bottomBar = findViewById(R.id.bottomBar)
         setupViews()

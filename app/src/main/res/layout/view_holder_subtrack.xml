@@ -27,27 +27,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/orange"
+            android:background="?attr/colorSecondary"
             android:paddingHorizontal="7dp">
 
             <TextView
                 android:id="@+id/subTrackTextView"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/madimi_regular"
-                android:text="Title - artist"
-                android:textColor="@color/somewhatBeige"
-                android:textSize="13sp"
                 android:ellipsize="marquee"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:fontFamily="@font/madimi_regular"
                 android:freezesText="true"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="Title - artist"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="13sp" />
         </LinearLayout>
 
+</androidx.cardview.widget.CardView>
 
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>

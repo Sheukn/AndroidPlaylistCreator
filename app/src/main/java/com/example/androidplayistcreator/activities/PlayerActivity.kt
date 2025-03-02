@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.entities.TrackEntity
@@ -34,9 +35,18 @@ class PlayerActivity : AppCompatActivity() {
     private var currentTrack: TrackEntity? = null
     private var musicService: MusicService? = null
     private var serviceBound = false
+    private lateinit var sharedPreferences: android.content.SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Set the theme
+        sharedPreferences = getSharedPreferences("theme_prefs", MODE_PRIVATE)
+        val isDarkTheme = sharedPreferences.getBoolean("isDarkTheme", false)
+        if (isDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
         setContentView(R.layout.activity_player)
 
         val gson = Gson()

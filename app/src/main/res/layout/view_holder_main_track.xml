@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/orange">
+        android:background="?attr/colorSecondary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/madimi_regular"
                 android:text="Track Name"
-                android:textColor="@color/somewhatBeige"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toTopOf="@id/trackDurationTextView"
                 app:layout_constraintLeft_toRightOf="@id/trackCardView" />
@@ -56,7 +56,7 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/madimi_regular"
                 android:text="Duration : 00:00"
-                android:textColor="@color/somewhatBeige"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/trackCardView"
                 app:layout_constraintLeft_toRightOf="@id/trackCardView" />

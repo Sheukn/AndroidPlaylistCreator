@@ -2,49 +2,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/lighterOrange"
+    android:background="?attr/colorSecondary"
     android:layout_margin="5dp">
 
-    <ImageView
-        android:id="@+id/sourceImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/logo_background"
-        android:contentDescription="source image"
-        android:src="@drawable/spotify"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<ImageView
+android:id="@+id/sourceImageView"
+android:layout_width="50dp"
+android:layout_height="50dp"
+android:background="@drawable/logo_background"
+android:contentDescription="source image"
+android:src="@drawable/spotify"
+app:layout_constraintLeft_toLeftOf="parent"
+app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/textContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:clipChildren="true"
-        android:clipToPadding="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/sourceImageView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<FrameLayout
+android:id="@+id/textContainer"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:layout_marginStart="5dp"
+android:clipChildren="true"
+android:clipToPadding="true"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintLeft_toRightOf="@id/sourceImageView"
+app:layout_constraintRight_toRightOf="parent"
+app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/resultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:freezesText="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:text="test"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:fontFamily="@font/madimi_regular"
-            />
+<TextView
+    android:id="@+id/resultTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:ellipsize="marquee"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:freezesText="true"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:scrollHorizontally="true"
+    android:singleLine="true"
+    android:text="test"
+    android:textColor="?attr/colorOnPrimary"
+    android:textSize="20sp"
+    android:fontFamily="@font/madimi_regular"/>
 
-    </FrameLayout>
+</FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
