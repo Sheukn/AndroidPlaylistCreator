@@ -1,12 +1,14 @@
 package com.example.androidplayistcreator.views
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.example.androidplayistcreator.R
+import com.example.androidplayistcreator.activities.PlayerActivity
 import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +49,15 @@ class BottomBarController(
                 }
             }
         }
+
+        bottomBar.setOnClickListener {
+            Intent(context, PlayerActivity::class.java).apply {
+                context.startActivity(this)
+            }
+        }
     }
+
+
 
     fun show() {
         bottomBar.visibility = ConstraintLayout.VISIBLE

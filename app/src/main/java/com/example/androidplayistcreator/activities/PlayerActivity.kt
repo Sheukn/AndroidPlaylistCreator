@@ -112,16 +112,47 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun playNextTrack() {
         if (currentTrackIndex < playlistWithSteps.steps.size - 1) {
+            // Move to the next step
             currentTrackIndex++
+
+            // Get the next step
             currentStep = Step.fromStepsWithTracksEntity(playlistWithSteps.steps[currentTrackIndex])
-            currentTrack = convertTracktoEntityTrack(currentStep.mainTrack)
-            updateUI()
-            musicService?.setTrack(currentStep.mainTrack)
-            musicService?.playTrack(currentStep.mainTrack)
-            isPlaying = true
-            playButton.setImageResource(R.drawable.pause_button)
+
+            // Check if we're currently playing a subtrack
+            if (currentTrack?.isSubTrack == true) {
+                // If we're playing a subtrack, skip it and play the next main track
+                currentTrack = convertTracktoEntityTrack(currentStep.mainTrack)
+                musicService?.setTrack(currentStep.mainTrack)
+                musicService?.playTrack(currentStep.mainTrack)
+                updateUI()
+                isPlaying = true
+                playButton.setImageResource(R.drawable.pause_button)
+            } else {
+                // If it's a main track, check if there are subtracks
+                if (currentStep.subTracks.isNotEmpty()) {
+                    val subTrack = currentStep.subTracks[0]  // You can modify the index to choose a different subtrack
+                    currentTrack = convertTracktoEntityTrack(subTrack)
+                    musicService?.setTrack(subTrack)
+                    musicService?.playTrack(subTrack)
+                    updateUI()
+                    isPlaying = true
+                    playButton.setImageResource(R.drawable.pause_button)
+                } else {
+                    // If there are no subtracks, play the main track
+                    currentTrack = convertTracktoEntityTrack(currentStep.mainTrack)
+                    musicService?.setTrack(currentStep.mainTrack)
+                    musicService?.playTrack(currentStep.mainTrack)
+                    updateUI()
+                    isPlaying = true
+                    playButton.setImageResource(R.drawable.pause_button)
+                }
+            }
         }
     }
+
+
+
+
 
     private fun playPreviousTrack() {
         if (currentTrackIndex > 0) {
@@ -179,6 +210,12 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        val intent = Intent()
+        val gson = Gson()
+        val playlistJson = gson.toJson(playlistWithSteps)
+        intent.putExtra("PLAYLIST_WITH_STEPS", playlistJson)
+        setResult(RESULT_OK, intent)
+
         if (serviceBound) {
             unbindService(serviceConnection)
             serviceBound = false
