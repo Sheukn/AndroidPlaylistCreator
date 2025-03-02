@@ -16,6 +16,7 @@ import com.example.androidplayistcreator.database.AppDatabase
 import com.example.androidplayistcreator.database.dao.PlaylistDao
 import com.example.androidplayistcreator.database.entities.PlaylistEntity
 import com.example.androidplayistcreator.database.entities.StepEntity
+import com.example.androidplayistcreator.database.entities.TrackEntity
 import com.example.androidplayistcreator.models.Step
 import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.models.singletons.PlaylistSingleton
@@ -24,6 +25,7 @@ import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.CreatePlaylistStepRVAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -50,6 +52,7 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         addStepButton = findViewById(R.id.addStepButton)
         createPlaylistButton = findViewById(R.id.playlistCreateButton)
         bottomBar = findViewById(R.id.bottomBar)
+        playlistNameEditText = findViewById(R.id.playlistNameEditText)
 
         playlistCreateRecyclerView.layoutManager = LinearLayoutManager(this)
         adapter = CreatePlaylistStepRVAdapter(stepsList)
@@ -60,9 +63,10 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         }
 
         createPlaylistButton.setOnClickListener {
-            // Log current data in the singleton
-            Log.d("PlaylistCreatorActivity", "Playlist: ${PlaylistSingleton.playlist}")
-
+            CoroutineScope (Dispatchers.IO).launch {
+                createPlaylist()
+            }
+            finish()
         }
 
         setupBottomBar()
@@ -93,6 +97,68 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun createPlaylist() {
+        var newPlaylist = PlaylistEntity(
+            name = playlistNameEditText.text.toString(),
+            imageUrl = null
+        )
+        playlistDao.insertPlaylist(newPlaylist);
+        var playlistId = playlistDao.getPlaylistIdByName(newPlaylist.name)
+        var steps = mutableListOf<StepEntity>()
+        var tracks = mutableListOf<TrackEntity>()
+        var cpt = 0
+
+        for(step in stepsList){
+            steps.add(StepEntity(
+                playlistId = playlistId,
+                step = cpt
+            ))
+            Log.d("PlaylistCreatorActivity", "Step added: $cpt")
+            cpt++
+        }
+        playlistDao.insertSteps(steps)
+
+        var dbSteps = playlistDao.getStepsByPlaylistId(playlistId)
+        Log.d("PlaylistCreatorActivity", "dbSteps: ${dbSteps}")
+        cpt = 0
+
+        for(step in stepsList) {
+
+            tracks.add(TrackEntity(
+                id = cpt,
+                artist = step.mainTrack.artist?:"unknown",
+                name = step.mainTrack.name,
+                stepId = dbSteps[cpt].id,
+                audiusId = step.mainTrack.audiusId,
+                duration = step.mainTrack.duration,
+                isSubTrack = false,
+                source = step.mainTrack.source,
+                isStreamable = step.mainTrack.isStreamable,
+                artwork = step.mainTrack.artwork
+            ))
+            Log.d("PlaylistCreatorActivity", "Main track added: ${step.mainTrack.name}")
+            for(subTrack in step.subTracks) {
+                tracks.add(
+                    TrackEntity(
+                        id = cpt,
+                        artist = subTrack.artist?:"unknown",
+                        name = subTrack.name,
+                        stepId = dbSteps[cpt].id,
+                        audiusId = subTrack.audiusId,
+                        duration = subTrack.duration,
+                        isSubTrack = true,
+                        source = subTrack.source,
+                        isStreamable = subTrack.isStreamable,
+                        artwork = subTrack.artwork
+                    )
+                )
+                Log.d("PlaylistCreatorActivity", "Subtrack added: ${subTrack.name}")
+            }
+            cpt ++
+        }
+        playlistDao.insertTracks(tracks)
+
+    }
 
 }
 

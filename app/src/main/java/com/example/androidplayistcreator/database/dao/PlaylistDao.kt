@@ -53,4 +53,7 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM TrackEntity WHERE stepId = :stepId")
     suspend fun getTracksByStepId(stepId: Int): List<TrackEntity>
+
+    @Query("SELECT id FROM PlaylistEntity WHERE name = :name")
+    suspend fun getPlaylistIdByName(name: String): Int
 }

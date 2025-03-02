@@ -49,11 +49,11 @@ class PlaylistActivity : AppCompatActivity() {
         setupBottomBar()
 
         CoroutineScope(Dispatchers.IO).launch {
-            val migrator = DatabaseMigrator(this@PlaylistActivity)
-            migrator.clearDatabase()
-            Log.d ("PlaylistActivity", "PlaylistDao: ${playlistDao.getAllTracks()}")
-            migrator.migrate()
-            Log.d ("PlaylistActivity", "PlaylistDao: ${playlistDao.getAllTracks()}")
+//            val migrator = DatabaseMigrator(this@PlaylistActivity)
+//            migrator.clearDatabase()
+//            Log.d ("PlaylistActivity", "PlaylistDao: ${playlistDao.getAllTracks()}")
+//            migrator.migrate()
+//            Log.d ("PlaylistActivity", "PlaylistDao: ${playlistDao.getAllTracks()}")
             loadPlaylists()
         }
     }

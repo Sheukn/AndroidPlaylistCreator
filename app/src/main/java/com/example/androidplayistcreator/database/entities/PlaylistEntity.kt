@@ -3,7 +3,8 @@ import androidx.room.*
 
 @Entity
 data class PlaylistEntity(
-    @PrimaryKey val id: Int,
+
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val imageUrl: String?
 )
