@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -34,6 +35,8 @@ class PlaylistActivity : AppCompatActivity() {
     private lateinit var bottomBar: ConstraintLayout
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var themeChangeButton: ToggleButton
+    private lateinit var deleteButton : Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,7 @@ class PlaylistActivity : AppCompatActivity() {
         userTextView = findViewById(R.id.userTextView)
         createPlaylistButton = findViewById(R.id.createPlaylistButton)
         bottomBar = findViewById(R.id.bottomBar)
+        deleteButton = findViewById(R.id.deleteAllButton)
 
         createPlaylistButton.setOnClickListener {
             val intent = Intent(this, PlaylistCreatorActivity::class.java)
@@ -60,6 +64,16 @@ class PlaylistActivity : AppCompatActivity() {
         }
         trackSingleton = TrackSingleton
         setupBottomBar()
+
+        deleteButton.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val migrator = DatabaseMigrator(this@PlaylistActivity)
+                migrator.clearDatabase()
+                withContext(Dispatchers.Main) {
+                    loadPlaylists()
+                }
+            }
+        }
 
         val themeChangeButton: ToggleButton = findViewById(R.id.themeChangeButton)
         themeChangeButton.setOnClickListener {
@@ -121,5 +135,10 @@ class PlaylistActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.playlist_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = PlaylistsRvAdapter(playlists)  // No need to pass com.example.androidplayistcreator.models.singletons.TrackSingleton
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadPlaylists()
     }
 }

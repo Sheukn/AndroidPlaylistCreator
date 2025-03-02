@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -18,14 +19,18 @@ import com.example.androidplayistcreator.R
 import com.example.androidplayistcreator.database.entities.TrackEntity
 import com.example.androidplayistcreator.database.relations.PlaylistWithSteps
 import com.example.androidplayistcreator.models.Step
+import com.example.androidplayistcreator.models.Track
 import com.example.androidplayistcreator.services.MusicService
 import com.google.gson.Gson
 
 class PlayerActivity : AppCompatActivity() {
+
     private lateinit var playButton: ImageView
+    private lateinit var previousButton: ImageView
+    private lateinit var nextButton: ImageView
     private lateinit var seekBar: SeekBar
     private lateinit var trackNameTextView: TextView
-    private lateinit var PlaylistNameTextView: TextView
+    private lateinit var playlistNameTextView: TextView
     private lateinit var trackArtworkImageView: ImageView
 
     private var isPlaying = false
@@ -35,6 +40,7 @@ class PlayerActivity : AppCompatActivity() {
     private var currentTrack: TrackEntity? = null
     private var musicService: MusicService? = null
     private var serviceBound = false
+    private lateinit var playlistWithSteps: PlaylistWithSteps
     private lateinit var sharedPreferences: android.content.SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,39 +55,38 @@ class PlayerActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_player)
 
-        val gson = Gson()
-        val playlistJson = intent.getStringExtra("PLAYLIST_WITH_STEPS")
-        val playlistWithSteps = gson.fromJson(playlistJson, PlaylistWithSteps::class.java)
-        println("Loaded playlist: $playlistWithSteps")
-
         playButton = findViewById(R.id.playButton)
+        previousButton = findViewById(R.id.previousButton)
+        nextButton = findViewById(R.id.nextButton)
         seekBar = findViewById(R.id.seekBar)
         trackNameTextView = findViewById(R.id.TrackNameTextView)
-        PlaylistNameTextView = findViewById(R.id.PlaylistNameTextView)
+        playlistNameTextView = findViewById(R.id.PlaylistNameTextView)
         trackArtworkImageView = findViewById(R.id.trackArtworkImageView)
 
-        PlaylistNameTextView.text = playlistWithSteps.playlist.name
-        currentStep = Step.fromStepsWithTracksEntity(playlistWithSteps.steps[0])
-        trackNameTextView.text = currentStep.mainTrack.name
+        val gson = Gson()
+        val playlistJson = intent.getStringExtra("PLAYLIST_WITH_STEPS")
+        playlistWithSteps = gson.fromJson(playlistJson, PlaylistWithSteps::class.java)
 
-        PlaylistNameTextView.post {
-            if (PlaylistNameTextView.layout != null && PlaylistNameTextView.width < PlaylistNameTextView.paint.measureText(playlistWithSteps.playlist.name)) {
-                PlaylistNameTextView.isSelected = true  // Ensures marquee effect starts
-            }
-        }
+        playlistNameTextView.text = playlistWithSteps.playlist.name
 
-        trackNameTextView.post {
-            if (trackNameTextView.layout != null && trackNameTextView.width < trackNameTextView.paint.measureText(currentStep.mainTrack.name)) {
-                trackNameTextView.isSelected = true  // Ensures marquee effect starts
-            }
-        }
+        currentTrackIndex = 0
+        currentStep = Step.fromStepsWithTracksEntity(playlistWithSteps.steps[currentTrackIndex])
+        currentTrack = convertTracktoEntityTrack(currentStep.mainTrack)
+        updateUI()
+
+        enableMarqueeEffect(playlistNameTextView, playlistWithSteps.playlist.name)
+        enableMarqueeEffect(trackNameTextView, currentTrack?.name ?: "")
 
         Glide.with(this)
-            .load(currentStep.mainTrack.artwork)
+            .load(currentTrack?.artwork)
             .into(trackArtworkImageView)
 
-        // Bind to MusicService to handle playback
         val serviceIntent = Intent(this, MusicService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent)
+        } else {
+            startService(serviceIntent)
+        }
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
 
         playButton.setOnClickListener {
@@ -93,6 +98,14 @@ class PlayerActivity : AppCompatActivity() {
                 musicService?.playTrack(currentStep.mainTrack)
             }
             isPlaying = !isPlaying
+        }
+
+        previousButton.setOnClickListener {
+            playPreviousTrack()
+        }
+
+        nextButton.setOnClickListener {
+            playNextTrack()
         }
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -107,18 +120,96 @@ class PlayerActivity : AppCompatActivity() {
         })
     }
 
+    private fun playNextTrack() {
+        if (currentTrackIndex < playlistWithSteps.steps.size - 1) {
+            // Move to the next step
+            currentTrackIndex++
+
+            // Get the next step
+            currentStep = Step.fromStepsWithTracksEntity(playlistWithSteps.steps[currentTrackIndex])
+
+            // Check if we're currently playing a subtrack
+            if (currentTrack?.isSubTrack == true) {
+                // If we're playing a subtrack, skip it and play the next main track
+                currentTrack = convertTracktoEntityTrack(currentStep.mainTrack)
+                musicService?.setTrack(currentStep.mainTrack)
+                musicService?.playTrack(currentStep.mainTrack)
+                updateUI()
+                isPlaying = true
+                playButton.setImageResource(R.drawable.pause_button)
+            } else {
+                // If it's a main track, check if there are subtracks
+                if (currentStep.subTracks.isNotEmpty()) {
+                    val subTrack = currentStep.subTracks[0]  // You can modify the index to choose a different subtrack
+                    currentTrack = convertTracktoEntityTrack(subTrack)
+                    musicService?.setTrack(subTrack)
+                    musicService?.playTrack(subTrack)
+                    updateUI()
+                    isPlaying = true
+                    playButton.setImageResource(R.drawable.pause_button)
+                } else {
+                    // If there are no subtracks, play the main track
+                    currentTrack = convertTracktoEntityTrack(currentStep.mainTrack)
+                    musicService?.setTrack(currentStep.mainTrack)
+                    musicService?.playTrack(currentStep.mainTrack)
+                    updateUI()
+                    isPlaying = true
+                    playButton.setImageResource(R.drawable.pause_button)
+                }
+            }
+        }
+    }
+
+
+
+
+
+    private fun playPreviousTrack() {
+        if (currentTrackIndex > 0) {
+            currentTrackIndex--
+            currentStep = Step.fromStepsWithTracksEntity(playlistWithSteps.steps[currentTrackIndex])
+            currentTrack = convertTracktoEntityTrack(currentStep.mainTrack)
+            updateUI()
+            musicService?.setTrack(currentStep.mainTrack)
+            musicService?.playTrack(currentStep.mainTrack)
+            isPlaying = true
+            playButton.setImageResource(R.drawable.pause_button)
+        }
+    }
+
+    private fun updateUI() {
+        trackNameTextView.text = currentTrack?.name
+        enableMarqueeEffect(trackNameTextView, currentTrack?.name ?: "")
+        Glide.with(this)
+            .load(currentTrack?.artwork)
+            .into(trackArtworkImageView)
+    }
+
+    private fun enableMarqueeEffect(textView: TextView, text: String) {
+        textView.text = text
+        textView.post {
+            if (textView.layout != null && textView.width < textView.paint.measureText(text)) {
+                textView.isSelected = true
+            }
+        }
+    }
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MusicService.MusicBinder
             musicService = binder.getService()
             serviceBound = true
 
-            // Set initial state
             musicService?.setTrack(currentStep.mainTrack)
             musicService?.setSeekBar(seekBar)
 
-            // Start playing the first track
             musicService?.playTrack(currentStep.mainTrack)
+            isPlaying = true
+            playButton.setImageResource(R.drawable.pause_button)
+
+            musicService?.setOnTrackCompletionListener {
+                playNextTrack()
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -129,10 +220,30 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        val intent = Intent()
+        val gson = Gson()
+        val playlistJson = gson.toJson(playlistWithSteps)
+        intent.putExtra("PLAYLIST_WITH_STEPS", playlistJson)
+        setResult(RESULT_OK, intent)
+
         if (serviceBound) {
             unbindService(serviceConnection)
             serviceBound = false
         }
     }
-}
 
+    private fun convertTracktoEntityTrack(track: Track): TrackEntity {
+        return TrackEntity(
+            id = track.id ?: 0,
+            name = track.name,
+            artist = track.artist ?: "Unknown",
+            audiusId = track.audiusId,
+            source = track.source ?: "AUDIUS",
+            duration = track.duration,
+            isSubTrack = track.isSubTrack,
+            stepId = track.step,
+            isStreamable = track.isStreamable,
+            artwork = track.artwork
+        )
+    }
+}

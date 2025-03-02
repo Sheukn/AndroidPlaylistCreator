@@ -1,7 +1,6 @@
 package com.example.androidplayistcreator.activities
 
-import android.app.Activity
-import android.content.Intent
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -26,9 +25,7 @@ import com.example.androidplayistcreator.views.BottomBarController
 import com.example.androidplayistcreator.views.recycler_view_adapters.CreatePlaylistStepRVAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PlaylistCreatorActivity : AppCompatActivity() {
     private lateinit var playlistDao: PlaylistDao
@@ -73,19 +70,58 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         }
 
         createPlaylistButton.setOnClickListener {
-            CoroutineScope (Dispatchers.IO).launch {
-                createPlaylist()
+            if (areAllTracksValid()) {
+                CoroutineScope(Dispatchers.IO).launch {
+
+                    createPlaylist()
+                    PlaylistSingleton.clear()
+                    finish()
+                }
             }
-            finish()
         }
 
         setupBottomBar()
     }
 
+    private fun showAlert(title: String, message: String) {
+
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
+    private fun areAllTracksValid(): Boolean {
+        Log.d("PlaylistCreatorActivity", "{stepsList: $stepsList}")
+        if (stepsList.isEmpty()) {
+            showAlert("Error", "Please add at least one track to the playlist")
+            return false
+        }
+        for (step in stepsList) {
+            if (step.mainTrack.audiusId == "0") {
+                showAlert("Error", "Please select a track for each step")
+                return false
+            }
+        }
+        return true
+    }
+
+
     private fun addStep() {
         stepsList.add(
             Step(
-                mainTrack = Track(name = "Track", artist = "Artist", audiusId = "0", duration = "0", isStreamable = false, step = 0, isSubTrack = false, source = null, artwork = null),
+                mainTrack = Track(
+                    name = "Track",
+                    artist = "Artist",
+                    audiusId = "0",
+                    duration = "0",
+                    isStreamable = false,
+                    step = 0,
+                    isSubTrack = false,
+                    source = null,
+                    artwork = null
+                ),
                 subTracks = mutableListOf() // Initialize as MutableList
             )
         )
@@ -100,7 +136,8 @@ class PlaylistCreatorActivity : AppCompatActivity() {
 
     private fun setupBottomBar() {
         if (TrackSingleton.getCurrentTrackId() != 0) {
-            bottomBarController = BottomBarController(bottomBar, TrackSingleton.getCurrentTrackId(), this)
+            bottomBarController =
+                BottomBarController(bottomBar, TrackSingleton.getCurrentTrackId(), this)
             bottomBarController.show()
         } else {
             bottomBar.visibility = ConstraintLayout.GONE
@@ -118,11 +155,13 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         var tracks = mutableListOf<TrackEntity>()
         var cpt = 0
 
-        for(step in stepsList){
-            steps.add(StepEntity(
-                playlistId = playlistId,
-                step = cpt
-            ))
+        for (step in stepsList) {
+            steps.add(
+                StepEntity(
+                    playlistId = playlistId,
+                    step = cpt
+                )
+            )
             Log.d("PlaylistCreatorActivity", "Step added: $cpt")
             cpt++
         }
@@ -132,26 +171,26 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         Log.d("PlaylistCreatorActivity", "dbSteps: ${dbSteps}")
         cpt = 0
 
-        for(step in stepsList) {
+        for (step in stepsList) {
 
-            tracks.add(TrackEntity(
-                id = cpt,
-                artist = step.mainTrack.artist?:"unknown",
-                name = step.mainTrack.name,
-                stepId = dbSteps[cpt].id,
-                audiusId = step.mainTrack.audiusId,
-                duration = step.mainTrack.duration,
-                isSubTrack = false,
-                source = step.mainTrack.source,
-                isStreamable = step.mainTrack.isStreamable,
-                artwork = step.mainTrack.artwork
-            ))
+            tracks.add(
+                TrackEntity(
+                    artist = step.mainTrack.artist ?: "unknown",
+                    name = step.mainTrack.name,
+                    stepId = dbSteps[cpt].id,
+                    audiusId = step.mainTrack.audiusId,
+                    duration = step.mainTrack.duration,
+                    isSubTrack = false,
+                    source = step.mainTrack.source,
+                    isStreamable = step.mainTrack.isStreamable,
+                    artwork = step.mainTrack.artwork
+                )
+            )
             Log.d("PlaylistCreatorActivity", "Main track added: ${step.mainTrack.name}")
-            for(subTrack in step.subTracks) {
+            for (subTrack in step.subTracks) {
                 tracks.add(
                     TrackEntity(
-                        id = cpt,
-                        artist = subTrack.artist?:"unknown",
+                        artist = subTrack.artist ?: "unknown",
                         name = subTrack.name,
                         stepId = dbSteps[cpt].id,
                         audiusId = subTrack.audiusId,
@@ -164,7 +203,7 @@ class PlaylistCreatorActivity : AppCompatActivity() {
                 )
                 Log.d("PlaylistCreatorActivity", "Subtrack added: ${subTrack.name}")
             }
-            cpt ++
+            cpt++
         }
         playlistDao.insertTracks(tracks)
 
