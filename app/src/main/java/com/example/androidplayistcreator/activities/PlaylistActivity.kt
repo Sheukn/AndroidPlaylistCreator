@@ -95,4 +95,9 @@ class PlaylistActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = PlaylistsRvAdapter(playlists)  // No need to pass com.example.androidplayistcreator.models.singletons.TrackSingleton
     }
+
+    override fun onResume() {
+        super.onResume()
+        loadPlaylists()
+    }
 }
