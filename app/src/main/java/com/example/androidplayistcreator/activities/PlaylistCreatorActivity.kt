@@ -125,7 +125,6 @@ class PlaylistCreatorActivity : AppCompatActivity() {
         for(step in stepsList) {
 
             tracks.add(TrackEntity(
-                id = cpt,
                 artist = step.mainTrack.artist?:"unknown",
                 name = step.mainTrack.name,
                 stepId = dbSteps[cpt].id,
@@ -140,7 +139,6 @@ class PlaylistCreatorActivity : AppCompatActivity() {
             for(subTrack in step.subTracks) {
                 tracks.add(
                     TrackEntity(
-                        id = cpt,
                         artist = subTrack.artist?:"unknown",
                         name = subTrack.name,
                         stepId = dbSteps[cpt].id,
